@@ -1,2 +1,2 @@
 # ProyectoItermodular-ICY
-Proyecto intermodular realizado por Carlos, Yon y Ian.
+Proyecto intermodular realizado por Carlos, Yon e Ian.
