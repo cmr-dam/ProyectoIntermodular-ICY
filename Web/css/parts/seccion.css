@@ -1,0 +1,18 @@
+/* Sección inicio */
+#inicio {
+    text-align: center;
+    padding: 6rem 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+#inicio h1 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+#inicio p {
+    font-size: 1.3rem;
+    opacity: 0.9;
+}
