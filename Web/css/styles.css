@@ -1,0 +1,12 @@
+/* Main CSS */
+@import url('./parts/body.css'); 
+@import url('./parts/header.css');
+@import url('./parts/seccion.css');
+@import url('./parts/seccion-tarifas.css');
+@import url('./parts/sobre-nosotros.css');
+@import url('./parts/formulario.css');
+@import url('./parts/footer.css');
+
+
+
+

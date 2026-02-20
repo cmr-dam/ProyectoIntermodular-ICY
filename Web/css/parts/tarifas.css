@@ -1,0 +1,41 @@
+/* tarifas.css */
+#tarifas {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 3vw;
+    width: 100%;
+}
+
+#tarifas h2 {
+    width: 100%;
+    text-align: center;
+    flex-basis: 100%;
+}
+
+#tarifas > div {
+    background-color: rgba(30, 144, 255, 0.05);
+    border: 0.15rem solid rgba(30, 144, 255, 0.3);
+    border-radius: 1rem;
+    padding: 3rem 2vw;
+    width: 30%;
+    min-width: 20rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+#tarifas > div:hover {
+    transform: translateY(-0.5rem);
+    border-color: #1E90FF;
+}
+
+#precio {
+    font-size: 2.5rem;
+    color: #1E90FF;
+    font-weight: 700;
+    margin-top: 1rem;
+}

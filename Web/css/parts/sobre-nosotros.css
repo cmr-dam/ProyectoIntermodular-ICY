@@ -1,0 +1,49 @@
+/* Sobre nosotros */
+#sobre-nosotros {
+    padding: 4rem 2rem;
+    text-align: center;
+    background: white;
+}
+
+#sobre-nosotros h2 {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: #667eea;
+}
+
+.historia {
+    display: inline-block;
+    background: white;
+    padding: 2rem;
+    margin: 1rem;
+    border-radius: 15px;
+    width: 280px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+    vertical-align: top;
+}
+
+.historia:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(102,126,234,0.3);
+}
+
+.historia img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.historia h3 {
+    color: #667eea;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.historia p {
+    color: #555;
+    line-height: 1.6;
+    text-align: left;
+}
