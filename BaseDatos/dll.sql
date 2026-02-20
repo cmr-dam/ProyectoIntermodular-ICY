@@ -1,3 +1,26 @@
+DROP TABLE IF EXISTS Entrenar;
+DROP TABLE IF EXISTS Limpiar;
+DROP TABLE IF EXISTS Enseñar;
+DROP TABLE IF EXISTS Realizar;
+DROP TABLE IF EXISTS Atender;
+DROP TABLE IF EXISTS Asistir;
+DROP TABLE IF EXISTS Acceder;
+DROP TABLE IF EXISTS Usar;
+DROP TABLE IF EXISTS Registrar_Salida;
+DROP TABLE IF EXISTS Registrar_Entrada;
+DROP TABLE IF EXISTS Cliente;
+DROP TABLE IF EXISTS Limpiador;
+DROP TABLE IF EXISTS Recepcionista;
+DROP TABLE IF EXISTS Entrenador;
+DROP TABLE IF EXISTS Empleados;
+DROP TABLE IF EXISTS Zona_Entrenos;
+DROP TABLE IF EXISTS Clases;
+DROP TABLE IF EXISTS Spa;
+DROP TABLE IF EXISTS Vestuario;
+DROP TABLE IF EXISTS Registro_Acceso;
+DROP TABLE IF EXISTS Calculadora;
+DROP TABLE IF EXISTS Membresia;
+
 --MEMBRESIA
 CREATE TABLE Membresia (
     id INT PRIMARY KEY,
@@ -73,6 +96,7 @@ CREATE TABLE Cliente (
     apellido VARCHAR(50),
     id_membresia INT,
     id_calculadora INT,
+    fecha_compra DATE, 
     FOREIGN KEY (id_membresia) REFERENCES Membresia(id),
     FOREIGN KEY (id_calculadora) REFERENCES Calculadora(id)
 );
@@ -129,9 +153,22 @@ CREATE TABLE Asistir (
 CREATE TABLE Atender (
     dni_empleados VARCHAR(20),
     dni_cliente VARCHAR(20),
+    fecha DATE, -- 
+    descripcion VARCHAR(255),
     PRIMARY KEY (dni_empleados, dni_cliente),
     FOREIGN KEY (dni_empleados) REFERENCES Empleados(dni),
     FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni)
+);
+
+-- Relación ternaria Realizar -> Entrenadores, Zona Entrenos y Clases
+CREATE TABLE Realizar (
+    dni_entrenador VARCHAR(20),
+    codigo_clases INT,
+    id_zona_entrenos INT NOT NULL,
+    PRIMARY KEY (dni_entrenador, codigo_clases),
+    FOREIGN KEY (dni_entrenador) REFERENCES Entrenador(tipo_empleados),
+    FOREIGN KEY (codigo_clases) REFERENCES Clases(codigo),
+    FOREIGN KEY (id_zona_entrenos) REFERENCES Zona_Entrenos(id)
 );
 
 --UN ENTRENADOR PUEDE ENSEÑAR A OTRO ENTRENADOR
@@ -151,4 +188,14 @@ CREATE TABLE Limpiar (
     PRIMARY KEY (turno_limpiador, id_zona_de_entrenos),
     FOREIGN KEY (turno_limpiador) REFERENCES Limpiador(tipo_empleados),
     FOREIGN KEY (id_zona_de_entrenos) REFERENCES Zona_Entrenos(id)
+);
+
+
+-- ENTRENAR Clientes -> zonas de entreno
+CREATE TABLE Entrenar (
+    dni_cliente VARCHAR(20),
+    id_zona_entrenos INT,
+    PRIMARY KEY (dni_cliente, id_zona_entrenos),
+    FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni),
+    FOREIGN KEY (id_zona_entrenos) REFERENCES Zona_Entrenos(id)
 );
