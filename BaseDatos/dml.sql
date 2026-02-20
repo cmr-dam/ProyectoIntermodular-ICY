@@ -117,7 +117,7 @@ INSERT INTO Atender (dni_empleados, dni_cliente, fecha, descripcion) VALUES
 ('11111111A', '77777777X', '2023-10-26', 'Revisión de rutina de entrenamiento'),
 ('44444444D', '55555555V', '2023-10-26', 'Evaluación física inicial');
 
-INSERT INTO Enseñar (entrenador1, entrenador2) VALUES 
+INSERT INTO Ensenyar (entrenador1, entrenador2) VALUES 
 ('44444444D', '11111111A'),
 ('55555555E', '44444444D');
 

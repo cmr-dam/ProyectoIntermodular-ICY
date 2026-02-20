@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS Entrenar;
 DROP TABLE IF EXISTS Limpiar;
-DROP TABLE IF EXISTS Enseñar;
+DROP TABLE IF EXISTS Ensenyar;
 DROP TABLE IF EXISTS Realizar;
 DROP TABLE IF EXISTS Atender;
 DROP TABLE IF EXISTS Asistir;
@@ -172,7 +172,7 @@ CREATE TABLE Realizar (
 );
 
 --UN ENTRENADOR PUEDE ENSEÑAR A OTRO ENTRENADOR
-CREATE TABLE Enseñar (
+CREATE TABLE Ensenyar (
     entrenador1 VARCHAR(20),
     entrenador2 VARCHAR(20),
     PRIMARY KEY (entrenador1, entrenador2),
