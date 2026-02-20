@@ -60,6 +60,7 @@ INSERT INTO Entrenador (tipo_empleados, tipo) VALUES
 ('22222222B', 'Yoga'),
 ('33333333C', 'Funcional');
 
+
 INSERT INTO Recepcionista (tipo_empleados, turno) VALUES 
 ('22222222B', 'Mañana'),
 ('11111111A', 'Tarde'),
