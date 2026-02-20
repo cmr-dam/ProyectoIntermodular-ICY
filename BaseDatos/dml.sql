@@ -1,35 +1,50 @@
 INSERT INTO Membresia (id, tipo) VALUES 
 (1, 'Básica'),
 (2, 'Premium'),
-(3, 'Familiar');
+(3, 'Familiar'),
+(4, 'Estudiante'),
+(5, 'VIP');
 
 INSERT INTO Calculadora (id, IMC) VALUES 
 (1, 22.50),
 (2, 27.80),
-(3, 19.40);
+(3, 19.40),
+(4, 24.10),
+(5, 30.25);
 
 INSERT INTO Registro_Acceso (codigo) VALUES 
 (101),
-(102);
+(102),
+(103),
+(104),
+(105);
 
 INSERT INTO Vestuario (id, genero) VALUES 
 (1, 'Masculino'),
-(2, 'Femenino');
+(2, 'Femenino'),
+(3, 'Mixto');
 
 INSERT INTO Spa (nombre) VALUES 
 ('Sauna Húmeda'),
 ('Jacuzzi Central'),
-('Zona Relax');
+('Zona Relax'),
+('Circuito Termal'),
+('Spa Deportivo');
 
 INSERT INTO Clases (codigo, tipo) VALUES 
 (501, 'Yoga'),
 (502, 'Crossfit'),
-(503, 'Pilates');
+(503, 'Pilates'),
+(504, 'Zumba'),
+(505, 'Boxeo');
+
 
 INSERT INTO Zona_Entrenos (id, tipo) VALUES 
 (1, 'Cardio'),
 (2, 'Musculación'),
-(3, 'Funcional');
+(3, 'Funcional'),
+(4, 'Peso Libre'),
+(5, 'Estiramientos');
 
 INSERT INTO Empleados (dni, telefono, nomina, nombre, apellido) VALUES 
 ('11111111A', '600111222', 1500.00, 'Carlos', 'Sánchez'),
@@ -41,15 +56,19 @@ INSERT INTO Empleados (dni, telefono, nomina, nombre, apellido) VALUES
 INSERT INTO Entrenador (tipo_empleados, tipo) VALUES 
 ('11111111A', 'Musculación'),
 ('44444444D', 'Cardio'),
-('55555555E', 'Artes Marciales');
+('55555555E', 'Artes Marciales'),
+('22222222B', 'Yoga'),
+('33333333C', 'Funcional');
 
 INSERT INTO Recepcionista (tipo_empleados, turno) VALUES 
-('22222222B', 'Mañana');
+('22222222B', 'Mañana'),
+('11111111A', 'Tarde'),
+('33333333C', 'Noche');
 
 INSERT INTO Limpiador (tipo_empleados, turno) VALUES 
-('33333333C', 'Tarde');
+('33333333C', 'Tarde'),
+('11111111A', 'Mañana');
 
--- CLIENTES (corregido: id_membresia=3 ahora existe, añadida fecha_compra)
 INSERT INTO Cliente (dni, nombre, apellido, id_membresia, id_calculadora, fecha_compra) VALUES 
 ('99999999Z', 'Juan',  'Pérez',  2, 1, '2023-01-15'),
 ('88888888Y', 'Maria', 'López',  1, 2, '2023-03-10'),
@@ -61,23 +80,29 @@ INSERT INTO Registrar_Entrada (codigo_registro_acceso, dni_cliente, fecha, hora)
 (101, '99999999Z', '2023-10-25', '09:00:00'),
 (101, '88888888Y', '2023-10-25', '10:30:00'),
 (102, '77777777X', '2023-10-26', '08:45:00'),
-(102, '66666666W', '2023-10-26', '11:00:00');
+(102, '66666666W', '2023-10-26', '11:00:00'),
+(103, '55555555V', '2023-10-27', '09:30:00');
 
 INSERT INTO Registrar_Salida (codigo_registro_acceso, dni_cliente, fecha, hora) VALUES 
 (101, '99999999Z', '2023-10-25', '11:00:00'),
 (101, '88888888Y', '2023-10-25', '12:00:00'),
-(102, '77777777X', '2023-10-26', '10:30:00');
+(102, '77777777X', '2023-10-26', '10:30:00'),
+(102, '66666666W', '2023-10-26', '12:30:00'),
+(103, '55555555V', '2023-10-27', '11:00:00');
 
 INSERT INTO Usar (id_vestuario, dni_cliente) VALUES 
 (1, '99999999Z'),
 (2, '88888888Y'),
 (1, '77777777X'),
-(2, '55555555V');
+(2, '55555555V'),
+(3, '66666666W');
 
 INSERT INTO Acceder (nombre_spa, dni_cliente) VALUES 
 ('Jacuzzi Central', '77777777X'),
-('Sauna Húmeda',    '99999999Z'),
-('Zona Relax',      '55555555V');
+('Sauna Húmeda', '99999999Z'),
+('Zona Relax', '55555555V'),
+('Circuito Termal', '88888888Y'),
+('Spa Deportivo', '66666666W');
 
 INSERT INTO Asistir (codigo_clases, dni_cliente) VALUES 
 (501, '88888888Y'),
@@ -103,7 +128,9 @@ INSERT INTO Limpiar (turno_limpiador, id_zona_de_entrenos, fecha) VALUES
 INSERT INTO Realizar (dni_entrenador, codigo_clases, id_zona_entrenos) VALUES 
 ('11111111A', 502, 2),
 ('44444444D', 501, 3),
-('55555555E', 503, 1);
+('55555555E', 503, 1),
+('22222222B', 504, 4),
+('33333333C', 505, 5);
 
 INSERT INTO Entrenar (dni_cliente, id_zona_entrenos) VALUES 
 ('99999999Z', 2),
