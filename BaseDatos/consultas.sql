@@ -113,17 +113,17 @@ WHERE nomina > (
 
 -- g. 2 Consultas usando group by con having
 
--- Membresias con mas de 2 clientes
+-- Membresias con un cliente o mas de 1 clientes
 SELECT id_membresia, COUNT(*) 
 FROM Cliente 
 GROUP BY id_membresia 
-HAVING COUNT(*) > 2;
+HAVING COUNT(*) >= 1;
 
--- Turnos de limpieza con mas de 1 empleado
+-- Turnos de limpieza con empleados
 SELECT turno, COUNT(*) 
 FROM Limpiador 
 GROUP BY turno 
-HAVING COUNT(*) > 1;
+HAVING COUNT(*) > 0;
 
 
 -- h. 3 actualizaciones usando subconsultas en where y set
@@ -184,7 +184,7 @@ FROM Empleados E, Entrenador En, Realizar R
 WHERE E.dni = En.tipo_empleados 
   AND En.tipo_empleados = R.dni_entrenador
 GROUP BY E.nombre, E.apellido
-HAVING COUNT(R.codigo_clases) > (
+HAVING COUNT(R.codigo_clases) >= (
     SELECT AVG(Conteo.Total) 
     FROM (
         SELECT dni_entrenador, COUNT(codigo_clases) AS Total
