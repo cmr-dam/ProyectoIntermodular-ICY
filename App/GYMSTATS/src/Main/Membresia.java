@@ -1,11 +1,23 @@
 
 public class Membresia {
 	
-	private String dni;
-	private String nombre;
-	private String apellido;
-	private int id_membresia;
-	private int id_calculadora;
-	//FECHA COMPRA FALTA
+	private int id;
+	private String tipo;
 	
+	public Membresia(int id, String tipo) {
+		this.id = id;
+		this.tipo = tipo;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	public String getTipo() {
+		return tipo;
+	}
 }
