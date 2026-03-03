@@ -65,8 +65,4 @@ public class Cliente {
 		this.id_calculadora = id_calculadora;
 	}
 	
-	
-	
-	
-	
 }

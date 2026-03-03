@@ -1,3 +1,4 @@
+package Main;
 
 public class Vestuario {
 	
@@ -17,7 +18,7 @@ public class Vestuario {
 	public void setGenero(String genero) {
 		this.genero = genero;
 	}
-	public void getGenero() {
+	public String getGenero() {
 		return genero;
 	}
 	public String toString() {
