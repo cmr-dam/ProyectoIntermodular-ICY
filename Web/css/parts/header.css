@@ -5,13 +5,29 @@ header {
     padding: 1.5rem;
     display: flex;
     justify-content: center;
+    align-items: center; 
     gap: 3rem;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
+
 header p {
     color: white;
     cursor: pointer;
+    font-weight: 500;
+    transition: transform 0.3s;
+}
+
+#enlaces img{
+  height: 46px;  
+  width: auto;
+}
+
+
+
+#enlaces a {
+    text-decoration: none;
+    color: white;
     font-weight: 500;
     transition: transform 0.3s;
 }
