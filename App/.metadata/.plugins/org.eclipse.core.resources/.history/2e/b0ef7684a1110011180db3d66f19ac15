@@ -1,0 +1,11 @@
+package Main;
+
+public class Empleados {
+	
+	private String dni; 
+	private int telefono;
+	private float nomina;
+	private String nombre; 
+	private String apellido;
+
+}

@@ -1,0 +1,8 @@
+package Main;
+
+public class Limpiador extends Empleados{
+	public Limpiador(String tipo_empleado) {
+		super(tipo_empleado); // DNI 
+	}
+	
+}

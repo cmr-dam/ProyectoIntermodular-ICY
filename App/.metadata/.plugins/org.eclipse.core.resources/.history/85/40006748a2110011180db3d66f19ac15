@@ -1,0 +1,10 @@
+package Main;
+
+public class Cliente {
+//    dni VARCHAR(20) PRIMARY KEY,
+//    nombre VARCHAR(50),
+//    apellido VARCHAR(50),
+//    id_membresia INT,
+//    id_calculadora INT,
+//    fecha_compra DATE, 
+}

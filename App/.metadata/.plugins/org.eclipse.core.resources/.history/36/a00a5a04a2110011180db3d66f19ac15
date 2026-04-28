@@ -1,0 +1,58 @@
+package Main;
+
+public class Empleados {
+	
+	private String dni; 
+	private int telefono;
+	private double nomina;
+	private String nombre; 
+	private String apellido;
+	
+	public Empleados(String dni) {
+		this.dni = dni;
+	}
+	public Empleados(String dni, int telefono, double nomina, String nombre, String apellido) {
+		this.dni = dni;
+	}
+
+	public String getDni() {
+		return dni;
+	}
+
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
+
+	public int getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(int telefono) {
+		this.telefono = telefono;
+	}
+
+	public double getNomina() {
+		return nomina;
+	}
+
+	public void setNomina(float nomina) {
+		this.nomina = nomina;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+}

@@ -1,0 +1,4 @@
+INDEX VERSION 1.134+C:\Users\Yon.DESKTOP-P0M5EJF\ProyectoItermodular-ICY\App\.metadata\.plugins\org.eclipse.jdt.core
+848136937.index
+279398250.index
+1865797976.index

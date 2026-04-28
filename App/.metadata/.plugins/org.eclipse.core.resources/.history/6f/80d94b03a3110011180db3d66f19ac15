@@ -1,0 +1,11 @@
+package Main;
+
+public class Recepcionista extends Empleados{
+	
+	public Recepcionista() {
+		super();
+	}
+	
+	
+	
+}
