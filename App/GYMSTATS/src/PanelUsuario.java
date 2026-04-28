@@ -141,7 +141,7 @@ public class PanelUsuario extends JFrame {
 			double altura = Double.parseDouble(txtAltura.getText());
 			
 			//SI ESCRIBIMOS ALTURA CON NUMEROS COMO 180 LO DIVIDIMOS ENTRE 100
-			//PARA QUE SE PONGA EN EL FORMATO CORRECTO
+			//PARA QUE SE PONGA EN EL FORMATO CORRECTOO
 			double alturaCalc = altura;
 			if (altura > 3.0) { 
 				alturaCalc = altura / 100;
