@@ -4,7 +4,7 @@ import javax.swing.border.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Gestion extends JFrame {
+public class PanelLogin extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
@@ -14,19 +14,10 @@ public class Gestion extends JFrame {
     private JTextField txtPassword;
     private JLabel  lblMensaje;
 
-    public static void main(String[] args) {
-        // Aplicamos el estilo LookAndFeel para que se vea mas bonito
-        try { 
-        	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
-        } catch (Exception e) {}
-        Gestion frame = new Gestion();
-        frame.setVisible(true);
-    }
-
-    public Gestion() {
+    public PanelLogin() {
         setTitle("GymStats - Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 400, 500);
+        setBounds(100, 100, 400, 401);
         setResizable(false);
         setLocationRelativeTo(null);
 
@@ -45,14 +36,14 @@ public class Gestion extends JFrame {
         lblTitulo.setForeground(azulGym);
         lblTitulo.setFont(new Font("Segoe UI Black", Font.ITALIC, 32));
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-        lblTitulo.setBounds(50, 40, 300, 50);
+        lblTitulo.setBounds(49, 22, 300, 50);
         contentPane.add(lblTitulo);
 
         // --- CAMPO USUARIO ---
         JLabel lblUser = new JLabel("USUARIO");
         lblUser.setForeground(Color.GRAY);
         lblUser.setFont(new Font("Segoe UI Bold", Font.PLAIN, 12));
-        lblUser.setBounds(50, 130, 100, 20);
+        lblUser.setBounds(49, 82, 100, 20);
         contentPane.add(lblUser);
 
         txtUsuario = new JTextField();
@@ -60,14 +51,14 @@ public class Gestion extends JFrame {
         txtUsuario.setForeground(Color.WHITE);
         txtUsuario.setCaretColor(azulGym);
         txtUsuario.setBorder(new EmptyBorder(0, 10, 0, 10));
-        txtUsuario.setBounds(50, 155, 300, 40);
+        txtUsuario.setBounds(49, 107, 300, 40);
         contentPane.add(txtUsuario);
 
         // --- CAMPO CONTRASEÑA ---
         JLabel lblPass = new JLabel("CONTRASEÑA");
         lblPass.setForeground(Color.GRAY);
         lblPass.setFont(new Font("Segoe UI Bold", Font.PLAIN, 12));
-        lblPass.setBounds(50, 215, 100, 20);
+        lblPass.setBounds(49, 167, 100, 20);
         contentPane.add(lblPass);
 
         txtPassword = new JTextField();
@@ -75,21 +66,13 @@ public class Gestion extends JFrame {
         txtPassword.setForeground(Color.WHITE);
         txtPassword.setCaretColor(azulGym);
         txtPassword.setBorder(new EmptyBorder(0, 10, 0, 10));
-        txtPassword.setBounds(50, 240, 300, 40);
+        txtPassword.setBounds(49, 192, 300, 40);
         contentPane.add(txtPassword);
-        
-        //FOOTER
-        JLabel lblFoot = new JLabel("Login Administrador");
-        lblFoot.setForeground(new Color(70, 70, 70));
-        lblFoot.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-        lblFoot.setHorizontalAlignment(SwingConstants.CENTER);
-        lblFoot.setBounds(50, 430, 300, 20);
-        contentPane.add(lblFoot);
         
         //MENSAJE INFORMACION
         lblMensaje = new JLabel("");
         lblMensaje.setForeground(Color.RED);
-        lblMensaje.setBounds(122, 290, 155, 12);
+        lblMensaje.setBounds(125, 262, 155, 12);
         contentPane.add(lblMensaje);
 
         // --- BOTÓN ACCEDER ---
@@ -118,7 +101,7 @@ public class Gestion extends JFrame {
         btnLogin.setFocusPainted(false);
         btnLogin.setBorder(null);
         btnLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnLogin.setBounds(50, 340, 300, 45);
+        btnLogin.setBounds(49, 284, 300, 45);
         contentPane.add(btnLogin);
        
     }
