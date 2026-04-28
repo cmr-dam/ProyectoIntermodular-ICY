@@ -1,0 +1,8 @@
+package Main;
+
+public class Empleados {
+	
+	private String dni; 
+	private int telefono;
+
+}

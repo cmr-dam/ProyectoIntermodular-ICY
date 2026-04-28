@@ -1,0 +1,9 @@
+package Main;
+
+public class Entrenador extends Empleados{
+	public Recepcionista(String tipo_empleado) {
+		super(tipo_empleado); // DNI 
+	}
+	
+
+}
