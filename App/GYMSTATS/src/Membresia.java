@@ -1,5 +1,3 @@
-package Main;
-
 public class Membresia {
 	
 	private int id;

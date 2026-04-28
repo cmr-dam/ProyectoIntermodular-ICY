@@ -1,5 +1,3 @@
-package Main;
-
 public class Clases {
 	
 	private int codigo;
