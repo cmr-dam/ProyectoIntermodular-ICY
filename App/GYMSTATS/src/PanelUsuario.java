@@ -167,12 +167,13 @@ public class PanelUsuario extends JFrame {
 			JOptionPane.showMessageDialog(this, "Datos inválidos");
 		}
 	}
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(() -> {
-//			try {
-//				PanelUsuario frame = new PanelUsuario("Carlos");
-//				frame.setVisible(true);
-//			} catch (Exception e) { e.printStackTrace(); }
-//		});
-//	}
+	
+public static void main(String[] args) {
+	EventQueue.invokeLater(() -> {
+		try {
+			PanelUsuario frame = new PanelUsuario("Carlos");
+			frame.setVisible(true);
+			} catch (Exception e) { e.printStackTrace(); }
+		});
+	}
 }
