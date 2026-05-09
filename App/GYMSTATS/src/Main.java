@@ -22,8 +22,8 @@ public class Main {
     public static Connection getConectar() {
     	//CONEXION BASE DE DATOS
         try {
-        	String url = "jdbc:postgresql://localhost:5432/bbdd_gymstats";
-            String usuario = "gymAdmin";
+        	String url = "jdbc:postgresql://localhost:5432/Gymstats";
+            String usuario = "postgres";
             String password = "1234";
         	
         	con = DriverManager.getConnection(url, usuario, password);

@@ -110,7 +110,7 @@ public class PanelLogin extends JFrame {
         		        String nombreCliente = rs.getString("nombre"); //Recogemos el nombre
         		        
         		        // Abrimos la ventana del usuario pasándole su nombre
-        		        PanelUsuario panelUser = new PanelUsuario(nombreCliente);
+        		        PanelUsuario panelUser = new PanelUsuario(nombreCliente, PanelLogin.this);
         		        panelUser.setVisible(true);
         		        
         		        //Cerramos la ventana de login
@@ -126,7 +126,7 @@ public class PanelLogin extends JFrame {
         		        
         		        if(rsAdmin.next()) {
         		            //Si entra aquí, es que es un admin
-        		            PanelAdministrador panelAdmin = new PanelAdministrador();
+        		            PanelAdministrador panelAdmin = new PanelAdministrador(PanelLogin.this);
         		            panelAdmin.setVisible(true);
         		            
         		            //Cerramos la ventana de login

@@ -11,10 +11,24 @@ public class PanelUsuario extends JFrame {
 	private JLabel lblValorIMC, lblEstadoIMC, lblDiasRestantes;
 	private JProgressBar progressMembresia;
 
-	public PanelUsuario(String nombreUsuario) {
+	public PanelUsuario(String nombreUsuario, PanelLogin p) {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				//Al cerrarla volvemos a el panel de login
+				int opcion = JOptionPane.showConfirmDialog(contentPane, "Seguro que quieres cerrar sesion?", "Cerrar Sesion", JOptionPane.INFORMATION_MESSAGE);
+				
+				if(opcion == JOptionPane.YES_OPTION) {
+					p.setVisible(true);
+					setVisible(false);
+				} else {
+					JOptionPane.showMessageDialog(contentPane, "Operacion cancelada", "Cancelado", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
 		setTitle("GymStats - Mi Perfil");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 500, 500); // Aumentamos tamaño para el nuevo diseño
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //Usamos esto porque si lo borramos se cierra igual
+		setBounds(100, 100, 500, 500); //Aumentamos tamaño
 		setLocationRelativeTo(null);
 		setResizable(false);
 		
@@ -166,14 +180,5 @@ public class PanelUsuario extends JFrame {
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(this, "Datos inválidos");
 		}
-	}
-	
-public static void main(String[] args) {
-	EventQueue.invokeLater(() -> {
-		try {
-			PanelUsuario frame = new PanelUsuario("Carlos");
-			frame.setVisible(true);
-			} catch (Exception e) { e.printStackTrace(); }
-		});
 	}
 }

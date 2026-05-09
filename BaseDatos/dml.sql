@@ -38,7 +38,6 @@ INSERT INTO Clases (codigo, tipo) VALUES
 (504, 'Zumba'),
 (505, 'Boxeo');
 
-
 INSERT INTO Zona_Entrenos (id, tipo) VALUES 
 (1, 'Cardio'),
 (2, 'Musculación'),
@@ -60,7 +59,6 @@ INSERT INTO Entrenador (tipo_empleados, tipo) VALUES
 ('22222222B', 'Yoga'),
 ('33333333C', 'Funcional');
 
-
 INSERT INTO Recepcionista (tipo_empleados, turno) VALUES 
 ('22222222B', 'Mañana'),
 ('11111111A', 'Tarde'),
@@ -70,12 +68,12 @@ INSERT INTO Limpiador (tipo_empleados, turno) VALUES
 ('33333333C', 'Tarde'),
 ('11111111A', 'Mañana');
 
-INSERT INTO Cliente (dni, nombre, apellido, id_membresia, id_calculadora, fecha_compra) VALUES 
-('99999999Z', 'Juan',  'Pérez',  2, 1, '2023-01-15'),
-('88888888Y', 'Maria', 'López',  1, 2, '2023-03-10'),
-('77777777X', 'Luis',  'Torres', 3, 3, '2023-06-20'),
-('66666666W', 'Sara',  'Díaz',   1, 1, '2023-09-05'),
-('55555555V', 'Marta', 'Ramos',  2, 2, '2023-10-01');
+INSERT INTO Cliente (dni, nombre, apellido, usuario, contraseña, id_membresia, id_calculadora, fecha_compra) VALUES 
+('99999999Z', 'Juan',  'Pérez',  'juanp', '1234', 2, 1, '2023-01-15'),
+('88888888Y', 'Maria', 'López',  'marial', '1234', 1, 2, '2023-03-10'),
+('77777777X', 'Luis',  'Torres', 'luist', '1234', 3, 3, '2023-06-20'),
+('66666666W', 'Sara',  'Díaz',   'sarad', '1234', 1, 1, '2023-09-05'),
+('55555555V', 'Marta', 'Ramos',  'martar', '1234', 2, 2, '2023-10-01');
 
 INSERT INTO Registrar_Entrada (codigo_registro_acceso, dni_cliente, fecha, hora) VALUES 
 (101, '99999999Z', '2023-10-25', '09:00:00'),
@@ -139,3 +137,7 @@ INSERT INTO Entrenar (dni_cliente, id_zona_entrenos) VALUES
 ('77777777X', 3),
 ('66666666W', 1),
 ('55555555V', 2);
+
+INSERT INTO Administrador (id, usuario, contraseña, nombre) VALUES 
+(1, 'carlos', '1234', 'Carlos'),
+(2, 'admin', 'admin', 'Administrador Principal');
