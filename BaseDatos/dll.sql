@@ -70,6 +70,14 @@ CREATE TABLE Empleados (
     apellido VARCHAR(50)
 );
 
+--ADMINISTRADORES
+CREATE TABLE Administrador (
+    id INT PRIMARY KEY,
+    usuario VARCHAR(50) UNIQUE,
+    contraseña VARCHAR(50),
+    nombre VARCHAR(50)
+);
+
 --DATOS TIPOS DE EMPLEADOS
 CREATE TABLE Entrenador (
     tipo_empleados VARCHAR(20) PRIMARY KEY,
@@ -94,6 +102,8 @@ CREATE TABLE Cliente (
     dni VARCHAR(20) PRIMARY KEY,
     nombre VARCHAR(50),
     apellido VARCHAR(50),
+    usuario VARCHAR(50) UNIQUE,
+    contraseña VARCHAR(50),
     id_membresia INT,
     id_calculadora INT,
     fecha_compra DATE, 

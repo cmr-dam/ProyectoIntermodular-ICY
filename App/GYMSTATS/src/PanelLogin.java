@@ -3,6 +3,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.*;
 
 public class PanelLogin extends JFrame {
 
@@ -80,19 +81,75 @@ public class PanelLogin extends JFrame {
         btnLogin.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		
-        		String user = txtUsuario.getText(); //Recogemos el usuario
-        		String passwd = txtPassword.getText(); //Recogemos la contraseña
-        			
-        		if(passwd.isEmpty() || user.isEmpty()) { //Si los campos están vacios, mostramos el error en el lblMensaje
-        			lblMensaje.setText("Debes rellenar todos los campos.");
-        		} else {
-        			lblMensaje.setText("");
+        		try {
+        		    String user = txtUsuario.getText(); 
+        		    String passwd = txtPassword.getText(); 
+        		        
+        		    //Comprobamos que no estén vacíos
+        		    if(passwd.isEmpty() || user.isEmpty()) { 
+        		        lblMensaje.setText("Debes rellenar todos los campos.");
+        		        return; //Salimos del método para que salte el error
+        		    } else {
+        		        lblMensaje.setText("");
+        		    }
+        		    
+        		    // Conectamos a la BBDD
+        		    Connection con = Main.getConectar();
+        		    
+        		    //Ejecutamos la consulta con PreparedStatement
+        		    String sql = "SELECT nombre FROM Cliente WHERE usuario = ? AND contraseña = ?"; //Usamos el ? para que se rellene el parametro
+        		    PreparedStatement pstmt = con.prepareStatement(sql);
+        		    pstmt.setString(1, user);
+        		    pstmt.setString(2, passwd);
+        		    
+        		    ResultSet rs = pstmt.executeQuery(); 
+        		    
+        		    // Si rs.next() es true, ese usuario existira en la base
+        		    //Primero buscamos clientes
+        		    if(rs.next()) {
+        		        String nombreCliente = rs.getString("nombre"); //Recogemos el nombre
+        		        
+        		        // Abrimos la ventana del usuario pasándole su nombre
+        		        PanelUsuario panelUser = new PanelUsuario(nombreCliente);
+        		        panelUser.setVisible(true);
+        		        
+        		        //Cerramos la ventana de login
+        		        dispose();
+        		    } else {
+        		        // Si no es cliente, buscamos en la tabla de administrador
+        		        String sqlAdmin = "SELECT nombre FROM Administrador WHERE usuario = ? AND contraseña = ?";
+        		        PreparedStatement pstmtAdmin = con.prepareStatement(sqlAdmin);
+        		        pstmtAdmin.setString(1, user);
+        		        pstmtAdmin.setString(2, passwd);
+        		        
+        		        ResultSet rsAdmin = pstmtAdmin.executeQuery();
+        		        
+        		        if(rsAdmin.next()) {
+        		            //Si entra aquí, es que es un admin
+        		            PanelAdministrador panelAdmin = new PanelAdministrador();
+        		            panelAdmin.setVisible(true);
+        		            
+        		            //Cerramos la ventana de login
+        		            dispose();
+        		        } else {
+        		            // Si no hay coincidencia, las credenciales son incorrectas
+        		            lblMensaje.setText("Usuario o contraseña incorrectos.");
+        		            txtPassword.setText(""); // Limpiamos la contraseña
+        		        }
+        		        
+        		        //Cerramos el ResultSet y el PreparedStatement del admin
+        		        rsAdmin.close();
+        		        pstmtAdmin.close();
+        		    }
+        		    
+        		    //Cerramos el preparedStarement y el ResultSet
+        		    rs.close();
+        		    pstmt.close();
+        		    
+        		} catch(SQLException ex) {
+        		    JOptionPane.showMessageDialog(contentPane, "Error de conexión con la base de datos.");
+        		    ex.printStackTrace();
         		}
-        		
-        		
-        		//Una vez iniciamos sesion, lo dejamos en blanco
-        		txtUsuario.setText("");
-        		txtPassword.setText("");
         	}
         });
         btnLogin.setBackground(azulGym);

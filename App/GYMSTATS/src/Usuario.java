@@ -1,58 +1,39 @@
 
-public class Usuario {
-	private String nombre;
-	private int edad;
-	private double peso;
-	private boolean membresia_activa;
-	private boolean acceso_spa;
+public abstract class Usuario {
+	private int id;
+	private String nombreUsuario;
+	private String contraseña;
 	
 	//CONSTRUCTOR
-	public Usuario(String nombre, int edad, double peso, boolean membresia_activa, boolean acceso_spa) {
-		this.nombre = nombre;
-		this.edad = edad;
-		this.peso = peso;
-		this.membresia_activa = membresia_activa;
-		this.acceso_spa = acceso_spa;
+	public Usuario(int id, String nombre, String contraseña) {
+		this.id = id;
+		this.nombreUsuario = nombre;
+		this.contraseña = contraseña;
 	}
 
 	//GETTERS-SETTERS
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getNombre() {
-		return nombre;
+		return nombreUsuario;
 	}
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		this.nombreUsuario = nombre;
 	}
-	public int getEdad() {
-		return edad;
+	public void setContraseña(String contraseña) {
+		this.contraseña = contraseña;
 	}
-	public void setEdad(int edad) {
-		this.edad = edad;
-	}
-	public double getPeso() {
-		return peso;
-	}
-	public void setPeso(double peso) {
-		this.peso = peso;
-	}
-	public boolean isMembresia_activa() {
-		return membresia_activa;
-	}
-	public void setMembresia_activa(boolean membresia_activa) {
-		this.membresia_activa = membresia_activa;
-	}
-	public boolean isAcceso_spa() {
-		return acceso_spa;
-	}
-	public void setAcceso_spa(boolean acceso_spa) {
-		this.acceso_spa = acceso_spa;
+	public String getContraseña() {
+		return contraseña;
 	}
 
 	//TO-STRING
 	@Override
 	public String toString() {
-		return "Usuario [nombre=" + nombre + ", edad=" + edad + ", peso=" + peso + ", membresia_activa="
-				+ membresia_activa + ", acceso_spa=" + acceso_spa + "]";
+		return "Usuario [nombre=" + nombreUsuario + ", contraseña=" + contraseña + "]";
 	}
-	
-	
 }
