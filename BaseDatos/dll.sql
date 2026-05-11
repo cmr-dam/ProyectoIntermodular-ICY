@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS Vestuario;
 DROP TABLE IF EXISTS Registro_Acceso;
 DROP TABLE IF EXISTS Calculadora;
 DROP TABLE IF EXISTS Membresia;
+DROP TABLE IF EXISTS Mensajes_Contacto;
 
 --MEMBRESIA
 CREATE TABLE Membresia (
@@ -208,4 +209,12 @@ CREATE TABLE Entrenar (
     PRIMARY KEY (dni_cliente, id_zona_entrenos),
     FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni),
     FOREIGN KEY (id_zona_entrenos) REFERENCES Zona_Entrenos(id)
+);
+-- Tabla de contacto que llega de la página web
+CREATE TABLE Mensajes_Contacto (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(100),
+    telefono VARCHAR(20),
+    mensaje TEXT,
+    es_empresa BOOLEAN
 );
