@@ -227,7 +227,13 @@ public class PanelAdministrador extends JFrame {
         btnAnadir.setBorder(new LineBorder(azulGym, 1, true));
         btnAnadir.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		//Aqui irá el código para añadir un socio
+        		try {
+        			AñadirSocio vSoc = new AñadirSocio(PanelAdministrador.this);
+        			setVisible(false);
+        			vSoc.setVisible(true);
+        		} catch(Exception crear) {
+        			JOptionPane.showMessageDialog(PanelAdministrador.this, "No se ha podido abrir la ventana de creacion.", "Error Ventana", JOptionPane.ERROR_MESSAGE);
+        		}
         	}
         });
         
@@ -310,7 +316,7 @@ public class PanelAdministrador extends JFrame {
     }
     
     // MÉTODO PARA RELLENAR LA TABLA DESDE LA BBDD
-    private void cargarDatosSocios() {
+    public void cargarDatosSocios() {
         // Limpiamos la tabla antes de cargar datos nuevos
         modeloTabla.setRowCount(0);
         
