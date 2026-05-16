@@ -251,6 +251,18 @@ public class PanelAdministrador extends JFrame {
         btnModificar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		
+        		int fila = tablaSocios.getSelectedRow();
+        		
+        		if(fila != -1) {
+        			//Recogemos el dni de el usuario seleccionado el cual esta en la primera columna y lo parseamos a String
+        			String dniSeleccionado = modeloTabla.getValueAt(fila, 0).toString();
+        			
+        			ModificarSocio ventanaModificar = new ModificarSocio(PanelAdministrador.this, dniSeleccionado);
+        			ventanaModificar.setVisible(true);
+        			setVisible(false);	
+        		} else {
+        			JOptionPane.showMessageDialog(PanelAdministrador.this, "Debes seleccionar una fila de la tabla", "Error", JOptionPane.ERROR_MESSAGE);
+        		}
         	}
         });
 
@@ -271,7 +283,7 @@ public class PanelAdministrador extends JFrame {
         	}
         });
 
-        // Añadimos los botones al panel
+        //Añadimos los botones al panel
         botones.add(btnAnadir);
         botones.add(btnModificar);
         botones.add(btnEliminar);
@@ -317,13 +329,13 @@ public class PanelAdministrador extends JFrame {
     
     // MÉTODO PARA RELLENAR LA TABLA DESDE LA BBDD
     public void cargarDatosSocios() {
-        // Limpiamos la tabla antes de cargar datos nuevos
+        //Limpiamos la tabla antes de cargar datos nuevos
         modeloTabla.setRowCount(0);
         
         try {
             Connection con = Main.getConectar();
             
-            // Hacemos la consulta a la tabla Cliente
+            //Hacemos la consulta a la tabla Cliente
             String sql = "SELECT dni, nombre, apellido, id_membresia FROM Cliente";
             PreparedStatement pstmt = con.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
@@ -335,8 +347,8 @@ public class PanelAdministrador extends JFrame {
                 String apellido = rs.getString("apellido");
                 int idMembresia = rs.getInt("id_membresia");
                 
-                // Creamos un array de objetos con los datos de la fila
-                // IMC y Último acceso los dejamos con "--" por defecto
+                //Creamos un array de objetos con los datos de la fila
+                //IMC y Último acceso los dejamos con "--" por defecto
                 Object[] fila = {
                     dni, 
                     nombre, 
@@ -346,7 +358,7 @@ public class PanelAdministrador extends JFrame {
                     "--"
                 };
                 
-                // Añadimos la fila a la tabla visual
+                //Añadimos la fila a la tabla visual
                 modeloTabla.addRow(fila);
             }
             

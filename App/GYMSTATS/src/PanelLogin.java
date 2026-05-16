@@ -12,7 +12,7 @@ public class PanelLogin extends JFrame {
     
     //VARIABLES PRIVADAS
     private JTextField txtUsuario;
-    private JTextField txtPassword;
+    private JPasswordField txtPassword;
     private JLabel  lblMensaje;
 
     public PanelLogin() {
@@ -22,7 +22,7 @@ public class PanelLogin extends JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
 
-        // Asignamos colores base
+        //Asignamos colores base
         Color fondoOscuro = new Color(30, 30, 30);
         Color azulGym = new Color(0, 212, 255);
         Color grisInput = new Color(45, 45, 45);
@@ -32,7 +32,7 @@ public class PanelLogin extends JFrame {
         contentPane.setLayout(null);
         setContentPane(contentPane);
 
-        // --- TÍTULO ---
+        //TÍTULO
         JLabel lblTitulo = new JLabel("GYMSTATS");
         lblTitulo.setForeground(azulGym);
         lblTitulo.setFont(new Font("Segoe UI Black", Font.ITALIC, 32));
@@ -40,7 +40,7 @@ public class PanelLogin extends JFrame {
         lblTitulo.setBounds(49, 22, 300, 50);
         contentPane.add(lblTitulo);
 
-        // --- CAMPO USUARIO ---
+        //CAMPO USUARIO
         JLabel lblUser = new JLabel("USUARIO");
         lblUser.setForeground(Color.GRAY);
         lblUser.setFont(new Font("Segoe UI Bold", Font.PLAIN, 12));
@@ -55,14 +55,14 @@ public class PanelLogin extends JFrame {
         txtUsuario.setBounds(49, 107, 300, 40);
         contentPane.add(txtUsuario);
 
-        // --- CAMPO CONTRASEÑA ---
+        //CAMPO CONTRASEÑA
         JLabel lblPass = new JLabel("CONTRASEÑA");
         lblPass.setForeground(Color.GRAY);
         lblPass.setFont(new Font("Segoe UI Bold", Font.PLAIN, 12));
         lblPass.setBounds(49, 167, 100, 20);
         contentPane.add(lblPass);
 
-        txtPassword = new JTextField();
+        txtPassword = new JPasswordField();
         txtPassword.setBackground(grisInput);
         txtPassword.setForeground(Color.WHITE);
         txtPassword.setCaretColor(azulGym);
@@ -76,10 +76,11 @@ public class PanelLogin extends JFrame {
         lblMensaje.setBounds(125, 262, 155, 12);
         contentPane.add(lblMensaje);
 
-        // --- BOTÓN ACCEDER ---
+        //BOTÓN LOGIN
         JButton btnLogin = new JButton("ACCEDER");
         btnLogin.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
+        	@SuppressWarnings("deprecation")
+			public void actionPerformed(ActionEvent e) {
         		
         		try {
         		    String user = txtUsuario.getText(); 
@@ -104,7 +105,7 @@ public class PanelLogin extends JFrame {
         		    
         		    ResultSet rs = pstmt.executeQuery(); 
         		    
-        		    // Si rs.next() es true, ese usuario existira en la base
+        		    //Si rs.next() es true, ese usuario existira en la base
         		    //Primero buscamos clientes
         		    if(rs.next()) {
         		        String nombreCliente = rs.getString("nombre"); //Recogemos el nombre
@@ -116,7 +117,7 @@ public class PanelLogin extends JFrame {
         		        //Cerramos la ventana de login
         		        dispose();
         		    } else {
-        		        // Si no es cliente, buscamos en la tabla de administrador
+        		        //Si no es cliente, buscamos en la tabla de administrador
         		        String sqlAdmin = "SELECT nombre FROM Administrador WHERE usuario = ? AND contraseña = ?";
         		        PreparedStatement pstmtAdmin = con.prepareStatement(sqlAdmin);
         		        pstmtAdmin.setString(1, user);
@@ -129,12 +130,14 @@ public class PanelLogin extends JFrame {
         		            PanelAdministrador panelAdmin = new PanelAdministrador(PanelLogin.this);
         		            panelAdmin.setVisible(true);
         		            
-        		            //Cerramos la ventana de login
+        		            txtUsuario.setText("");
+        		            txtPassword.setText("");
+        		            //Cerramos la ventana de login y vaciamos los campos de texto
         		            dispose();
         		        } else {
-        		            // Si no hay coincidencia, las credenciales son incorrectas
+        		            //Si no hay coincidencia, las credenciales son incorrectas
         		            lblMensaje.setText("Usuario o contraseña incorrectos.");
-        		            txtPassword.setText(""); // Limpiamos la contraseña
+        		            txtPassword.setText(""); //Limpiamos la contraseña
         		        }
         		        
         		        //Cerramos el ResultSet y el PreparedStatement del admin
