@@ -1,7 +1,10 @@
 import javax.swing.*;
+import javax.sql.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 public class PanelUsuario extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -154,8 +157,6 @@ public class PanelUsuario extends JFrame {
 			double peso = Double.parseDouble(txtPeso.getText());
 			double altura = Double.parseDouble(txtAltura.getText());
 			
-			//SI ESCRIBIMOS ALTURA CON NUMEROS COMO 180 LO DIVIDIMOS ENTRE 100
-			//PARA QUE SE PONGA EN EL FORMATO CORRECTOO
 			double alturaCalc = altura;
 			if (altura > 3.0) { 
 				alturaCalc = altura / 100;
@@ -177,8 +178,22 @@ public class PanelUsuario extends JFrame {
 				lblEstadoIMC.setText("SOBREPESO"); 
 				lblEstadoIMC.setForeground(Color.ORANGE); 
 			}
+			
+			String sqlUpdate = "UPDATE Cliente SET imc = ? WHERE dni = ?";
+			
+			Connection con = Main.getConectar();
+			PreparedStatement pstmt = con.prepareStatement(sqlUpdate);
+			
+			pstmt.setDouble(1, imc);
+			pstmt.setString(2, "24509999Z"); 
+			
+			pstmt.executeUpdate();
+			
+			
+			pstmt.close();
+
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, "Datos inválidos");
+			JOptionPane.showMessageDialog(this, "Error al calcular o guardar los datos");
 		}
 	}
 }

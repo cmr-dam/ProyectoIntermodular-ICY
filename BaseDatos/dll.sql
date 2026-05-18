@@ -106,10 +106,10 @@ CREATE TABLE Cliente (
     usuario VARCHAR(50) UNIQUE,
     contraseña VARCHAR(50),
     id_membresia INT,
-    id_calculadora INT,
-    fecha_compra DATE, 
-    FOREIGN KEY (id_membresia) REFERENCES Membresia(id),
-    FOREIGN KEY (id_calculadora) REFERENCES Calculadora(id)
+    imc DECIMAL(5,2),
+    ultimo_acceso TIMESTAMP,
+    fecha_compra DATE DEFAULT CURRENT_DATE,
+    FOREIGN KEY (id_membresia) REFERENCES Membresia(id)
 );
 
 --REGISTRAR LA ENTRADA/SALIDA

@@ -16,6 +16,8 @@ public class PanelAdministrador extends JFrame {
     private static final long serialVersionUID = 1L;
     private JTable tablaSocios;
     private DefaultTableModel modeloTabla;
+    
+    private JPanel contentArea;
 
     //Creamos las variables de los colores para usar los mismos
     Color fondoOscuro = new Color(30, 30, 30);
@@ -23,33 +25,66 @@ public class PanelAdministrador extends JFrame {
     Color grisInput = new Color(45, 45, 45);
 
     public PanelAdministrador(PanelLogin p) {
-    	addWindowListener(new WindowAdapter() {
-    		@Override
-    		public void windowClosing(WindowEvent e) {
-				//Al cerrarla volvemos a el panel de login
-				int opcion = JOptionPane.showConfirmDialog(PanelAdministrador.this, "Seguro que quieres cerrar sesion?", "Cerrar Sesion", JOptionPane.INFORMATION_MESSAGE);
-				
-				if(opcion == JOptionPane.YES_OPTION) {
-					p.setVisible(true);
-					setVisible(false);
-				} else {
-					JOptionPane.showMessageDialog(PanelAdministrador.this, "Operacion cancelada", "Cancelado", JOptionPane.INFORMATION_MESSAGE);
-				}
-    		}
-    	});
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                //Al cerrarla volvemos a el panel de login
+                int opcion = JOptionPane.showConfirmDialog(PanelAdministrador.this, "Seguro que quieres cerrar sesion?", "Cerrar Sesion", JOptionPane.INFORMATION_MESSAGE);
+                
+                if(opcion == JOptionPane.YES_OPTION) {
+                    p.setVisible(true);
+                    setVisible(false);
+                } else {
+                    JOptionPane.showMessageDialog(PanelAdministrador.this, "Operacion cancelada", "Cancelado", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
         setTitle("GymStats - Panel de Gestión");
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //Usamos esto porque si lo borramos se cierra igual
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //Usamos esto porque si lo borramos se cierra igual
         setSize(1200, 700);
         setLocationRelativeTo(null);
         getContentPane().setLayout(new BorderLayout());
-
         getContentPane().setBackground(fondoOscuro);
 
+        // Inicializamos el area de contenido
+        contentArea = new JPanel(new BorderLayout());
+        contentArea.setBackground(fondoOscuro);
+
         getContentPane().add(crearSidebar(), BorderLayout.WEST);
-        getContentPane().add(crearContenido(), BorderLayout.CENTER);
+        getContentPane().add(contentArea, BorderLayout.CENTER);
         
-        //Una vez se crea lo visual, llamamos a el metodo para cargar la tabla de los socios
+        //Una vez se crea lo visual, mostramos el contenido inicial y cargamos los datos
+        mostrarPanel(crearContenido());
         cargarDatosSocios();
+    }
+    
+    //Metodo principal para cambiar los paneles
+    public void mostrarPanel(JPanel panelNuevo) {
+        contentArea.removeAll();
+        contentArea.add(panelNuevo, BorderLayout.CENTER);
+        contentArea.revalidate(); 
+        contentArea.repaint(); 
+    }
+    
+    //Metodo para aplicar estilo a los botones
+    private JButton crearBotonMenu(String texto) {
+        JButton btn = new JButton(texto);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        btn.setForeground(Color.WHITE);
+        btn.setBackground(grisInput);
+        btn.setFocusPainted(false);
+        btn.setHorizontalAlignment(SwingConstants.LEFT);
+        btn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 58));
+        btn.setPreferredSize(new Dimension(220, 58));
+        btn.setMargin(new Insets(8, 15, 8, 15));
+        btn.setContentAreaFilled(false);
+        btn.setOpaque(true);
+        btn.setBorderPainted(true);
+        btn.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(azulGym, 1, true),
+                new EmptyBorder(8, 12, 8, 12)
+        ));
+        return btn;
     }
 
     //Panel lateral
@@ -69,113 +104,25 @@ public class PanelAdministrador extends JFrame {
         menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
         menu.setBackground(grisInput);
 
-        //BOTÓN INICIO
-        JButton btnInicio = new JButton("Inicio");
-        btnInicio.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        btnInicio.setFocusPainted(false);
-        btnInicio.setHorizontalAlignment(SwingConstants.LEFT);
-        btnInicio.setMaximumSize(new Dimension(Integer.MAX_VALUE, 58));
-        btnInicio.setPreferredSize(new Dimension(220, 58));
-        btnInicio.setMargin(new Insets(8, 15, 8, 15));
-        btnInicio.setBackground(grisInput);
-        btnInicio.setForeground(Color.WHITE);
-        btnInicio.setContentAreaFilled(false);
-        btnInicio.setOpaque(true);
-        btnInicio.setBorderPainted(true);
-        btnInicio.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(azulGym, 1, true),
-                new EmptyBorder(8, 12, 8, 12)
-        ));
+        // BOTONES CREADOS CON EL MÉTODO OPTIMIZADO
+        JButton btnInicio = crearBotonMenu("Inicio");
+        btnInicio.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                //Logica de inicio
+            }
+        });
         
-        //BOTÓN SOCIOS
-        JButton btnSocios = new JButton("Socios");
-        btnSocios.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        btnSocios.setFocusPainted(false);
-        btnSocios.setHorizontalAlignment(SwingConstants.LEFT);
-        btnSocios.setMaximumSize(new Dimension(Integer.MAX_VALUE, 58));
-        btnSocios.setPreferredSize(new Dimension(220, 58));
-        btnSocios.setMargin(new Insets(8, 15, 8, 15));
-        btnSocios.setBackground(grisInput);
-        btnSocios.setForeground(Color.WHITE);
-        btnSocios.setContentAreaFilled(false);
-        btnSocios.setOpaque(true);
-        btnSocios.setBorderPainted(true);
-        btnSocios.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(azulGym, 1, true),
-                new EmptyBorder(8, 12, 8, 12)
-        ));
+        JButton btnSocios = crearBotonMenu("Socios");
+        btnSocios.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarPanel(crearContenido());
+                cargarDatosSocios();
+            }
+        });
 
-        //BOTÓN PERSONAL
-        JButton btnPersonal = new JButton("Personal");
-        btnPersonal.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        btnPersonal.setFocusPainted(false);
-        btnPersonal.setHorizontalAlignment(SwingConstants.LEFT);
-        btnPersonal.setMaximumSize(new Dimension(Integer.MAX_VALUE, 58));
-        btnPersonal.setPreferredSize(new Dimension(220, 58));
-        btnPersonal.setMargin(new Insets(8, 15, 8, 15));
-        btnPersonal.setBackground(grisInput);
-        btnPersonal.setForeground(Color.WHITE);
-        btnPersonal.setContentAreaFilled(false);
-        btnPersonal.setOpaque(true);
-        btnPersonal.setBorderPainted(true);
-        btnPersonal.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(azulGym, 1, true),
-                new EmptyBorder(8, 12, 8, 12)
-        ));
-
-        //BOTÓN ACTIVIDADES
-        JButton btnActividades = new JButton("Actividades");
-        btnActividades.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        btnActividades.setFocusPainted(false);
-        btnActividades.setHorizontalAlignment(SwingConstants.LEFT);
-        btnActividades.setMaximumSize(new Dimension(Integer.MAX_VALUE, 58));
-        btnActividades.setPreferredSize(new Dimension(220, 58));
-        btnActividades.setMargin(new Insets(8, 15, 8, 15));
-        btnActividades.setBackground(grisInput);
-        btnActividades.setForeground(Color.WHITE);
-        btnActividades.setContentAreaFilled(false);
-        btnActividades.setOpaque(true);
-        btnActividades.setBorderPainted(true);
-        btnActividades.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(azulGym, 1, true),
-                new EmptyBorder(8, 12, 8, 12)
-        ));
-
-        //BOTÓN ACCESO
-        JButton btnAcceso = new JButton("Acceso");
-        btnAcceso.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        btnAcceso.setFocusPainted(false);
-        btnAcceso.setHorizontalAlignment(SwingConstants.LEFT);
-        btnAcceso.setMaximumSize(new Dimension(Integer.MAX_VALUE, 58));
-        btnAcceso.setPreferredSize(new Dimension(220, 58));
-        btnAcceso.setMargin(new Insets(8, 15, 8, 15));
-        btnAcceso.setBackground(grisInput);
-        btnAcceso.setForeground(Color.WHITE);
-        btnAcceso.setContentAreaFilled(false);
-        btnAcceso.setOpaque(true);
-        btnAcceso.setBorderPainted(true);
-        btnAcceso.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(azulGym, 1, true),
-                new EmptyBorder(8, 12, 8, 12)
-        ));
-
-        //BOTÓN CONFIGURACIÓN
-        JButton btnConfiguracion = new JButton("Configuración");
-        btnConfiguracion.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        btnConfiguracion.setFocusPainted(false);
-        btnConfiguracion.setHorizontalAlignment(SwingConstants.LEFT);
-        btnConfiguracion.setMaximumSize(new Dimension(Integer.MAX_VALUE, 58));
-        btnConfiguracion.setPreferredSize(new Dimension(220, 58));
-        btnConfiguracion.setMargin(new Insets(8, 15, 8, 15));
-        btnConfiguracion.setBackground(grisInput);
-        btnConfiguracion.setForeground(Color.WHITE);
-        btnConfiguracion.setContentAreaFilled(false);
-        btnConfiguracion.setOpaque(true);
-        btnConfiguracion.setBorderPainted(true);
-        btnConfiguracion.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(azulGym, 1, true),
-                new EmptyBorder(8, 12, 8, 12)
-        ));
+        JButton btnPersonal = crearBotonMenu("Personal");
+        JButton btnActividades = crearBotonMenu("Actividades");
+        JButton btnAcceso = crearBotonMenu("Acceso");
 
         //Añadimos los botones al menu
         menu.add(btnInicio);
@@ -187,8 +134,6 @@ public class PanelAdministrador extends JFrame {
         menu.add(btnActividades);
         menu.add(Box.createVerticalStrut(12));
         menu.add(btnAcceso);
-        menu.add(Box.createVerticalStrut(12));
-        menu.add(btnConfiguracion);
 
         sidebar.add(titulo, BorderLayout.NORTH);
         sidebar.add(menu, BorderLayout.CENTER);
@@ -226,15 +171,33 @@ public class PanelAdministrador extends JFrame {
         btnAnadir.setBorderPainted(true);
         btnAnadir.setBorder(new LineBorder(azulGym, 1, true));
         btnAnadir.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		try {
-        			AñadirSocio vSoc = new AñadirSocio(PanelAdministrador.this);
-        			setVisible(false);
-        			vSoc.setVisible(true);
-        		} catch(Exception crear) {
-        			JOptionPane.showMessageDialog(PanelAdministrador.this, "No se ha podido abrir la ventana de creacion.", "Error Ventana", JOptionPane.ERROR_MESSAGE);
-        		}
-        	}
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    AñadirSocio vSoc = new AñadirSocio(PanelAdministrador.this);
+                    setVisible(false);
+                    vSoc.setVisible(true);
+                } catch(Exception crear) {
+                    JOptionPane.showMessageDialog(PanelAdministrador.this, "No se ha podido abrir la ventana de creacion.", "Error Ventana", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        
+      //BOTÓN ACTUALIZAR
+        JButton btnActualizar = new JButton("Actualizar");
+        btnActualizar.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        btnActualizar.setFocusPainted(false);
+        btnActualizar.setPreferredSize(new Dimension(140, 38));
+        btnActualizar.setBackground(azulGym);
+        btnActualizar.setForeground(Color.BLACK);
+        btnActualizar.setContentAreaFilled(false);
+        btnActualizar.setOpaque(true);
+        btnActualizar.setBorderPainted(true);
+        btnActualizar.setBorder(new LineBorder(azulGym, 1, true));
+        btnActualizar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Llama al método que vacía la tabla y vuelve a hacer el SELECT
+                cargarDatosSocios();
+            }
         });
         
         //BOTÓN MODIFICAR
@@ -249,21 +212,21 @@ public class PanelAdministrador extends JFrame {
         btnModificar.setBorderPainted(true);
         btnModificar.setBorder(new LineBorder(azulGym, 1, true));
         btnModificar.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		
-        		int fila = tablaSocios.getSelectedRow();
-        		
-        		if(fila != -1) {
-        			//Recogemos el dni de el usuario seleccionado el cual esta en la primera columna y lo parseamos a String
-        			String dniSeleccionado = modeloTabla.getValueAt(fila, 0).toString();
-        			
-        			ModificarSocio ventanaModificar = new ModificarSocio(PanelAdministrador.this, dniSeleccionado);
-        			ventanaModificar.setVisible(true);
-        			setVisible(false);	
-        		} else {
-        			JOptionPane.showMessageDialog(PanelAdministrador.this, "Debes seleccionar una fila de la tabla", "Error", JOptionPane.ERROR_MESSAGE);
-        		}
-        	}
+            public void actionPerformed(ActionEvent e) {
+                
+                int fila = tablaSocios.getSelectedRow();
+                
+                if(fila != -1) {
+                    //Recogemos el dni de el usuario seleccionado el cual esta en la primera columna y lo parseamos a String
+                    String dniSeleccionado = modeloTabla.getValueAt(fila, 0).toString();
+                    
+                    ModificarSocio ventanaModificar = new ModificarSocio(PanelAdministrador.this, dniSeleccionado);
+                    ventanaModificar.setVisible(true);
+                    setVisible(false);  
+                } else {
+                    JOptionPane.showMessageDialog(PanelAdministrador.this, "Debes seleccionar una fila de la tabla", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         });
 
         //BOTÓN ELIMINAR
@@ -278,15 +241,48 @@ public class PanelAdministrador extends JFrame {
         btnEliminar.setBorderPainted(true);
         btnEliminar.setBorder(new LineBorder(azulGym, 1, true));
         btnEliminar.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		
-        	}
+            public void actionPerformed(ActionEvent e) {
+                String sql = "DELETE FROM Cliente WHERE dni = ?";
+                
+                try {
+                    int filaSeleccionada = tablaSocios.getSelectedRow();
+                    
+                    if(filaSeleccionada != -1) {
+                        String dni = tablaSocios.getValueAt(filaSeleccionada, 0).toString(); //Recogemos el dni y lo parseamos a String
+                        int confirmar = JOptionPane.showConfirmDialog(PanelAdministrador.this, "Seguro que quieres eliminar a este usuario?", "Eliminar", JOptionPane.YES_NO_CANCEL_OPTION);
+                        
+                        if(confirmar == JOptionPane.YES_OPTION) {
+                            Connection con = Main.getConectar();
+                            PreparedStatement pstmt = con.prepareStatement(sql);
+                            
+                            pstmt.setString(1, dni); //Pasamos el dni como parametro
+                            
+                            int resultado = pstmt.executeUpdate();
+                            
+                            //Si la cantidad de usuarios borrados es > 0 mostramos confirmacion
+                            if(resultado > 0) {
+                                modeloTabla.removeRow(filaSeleccionada);
+                                JOptionPane.showMessageDialog(PanelAdministrador.this, "Se ha borrado correctamente", "Borrado", JOptionPane.OK_OPTION);
+                            }
+                            pstmt.close();
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(PanelAdministrador.this, "Debes seleccionar una fila", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                    
+                } catch(Exception eliminar) {
+                    eliminar.printStackTrace();
+                    JOptionPane.showMessageDialog(PanelAdministrador.this, "No se ha podido eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         });
 
         //Añadimos los botones al panel
         botones.add(btnAnadir);
         botones.add(btnModificar);
         botones.add(btnEliminar);
+        botones.add(btnActualizar);
 
         JPanel zonaSuperior = new JPanel();
         zonaSuperior.setLayout(new BoxLayout(zonaSuperior, BoxLayout.Y_AXIS));
@@ -336,26 +332,36 @@ public class PanelAdministrador extends JFrame {
             Connection con = Main.getConectar();
             
             //Hacemos la consulta a la tabla Cliente
-            String sql = "SELECT dni, nombre, apellido, id_membresia FROM Cliente";
+            String sql = "SELECT dni, nombre, apellido, id_membresia, imc, ultimo_acceso FROM Cliente";
             PreparedStatement pstmt = con.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
             
-            // Recorremos los resultados
+            // Recorremos los resultados y los almacenamos en variables
             while(rs.next()) {
                 String dni = rs.getString("dni");
                 String nombre = rs.getString("nombre");
                 String apellido = rs.getString("apellido");
                 int idMembresia = rs.getInt("id_membresia");
                 
+                String imcStr = rs.getString("imc");
+                
+                if(imcStr == null || imcStr.isEmpty()) {  //Si el imc aun no ha sido calculado por el cliente ponemos --
+                	imcStr = "--";
+                }
+                
+                String accesoStr = rs.getString("ultimo_acceso"); //al igual con ultimo acceso
+                if (accesoStr == null || accesoStr.isEmpty()) {
+                    accesoStr = "--";
+                }
+                
                 //Creamos un array de objetos con los datos de la fila
-                //IMC y Último acceso los dejamos con "--" por defecto
                 Object[] fila = {
                     dni, 
                     nombre, 
                     apellido, 
                     idMembresia, 
-                    "--", 
-                    "--"
+                    imcStr, 
+                    accesoStr
                 };
                 
                 //Añadimos la fila a la tabla visual

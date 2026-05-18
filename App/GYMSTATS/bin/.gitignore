@@ -7,6 +7,10 @@
 /Cliente.class
 /Main.class
 /Membresia.class
+/ModificarSocio$1.class
+/ModificarSocio$2.class
+/ModificarSocio$3.class
+/ModificarSocio.class
 /PanelAdministrador$1.class
 /PanelAdministrador$2.class
 /PanelAdministrador$3.class
@@ -17,7 +21,6 @@
 /PanelUsuario$1.class
 /PanelUsuario.class
 /Usuario.class
-/ModificarSocio$1.class
-/ModificarSocio$2.class
-/ModificarSocio$3.class
-/ModificarSocio.class
+/PanelAdministrador$5.class
+/PanelAdministrador$6.class
+/PanelAdministrador$7.class
