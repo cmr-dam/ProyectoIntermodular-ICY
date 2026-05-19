@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS Mensajes_Contacto;
 DROP TABLE IF EXISTS Entrenar;
 DROP TABLE IF EXISTS Limpiar;
 DROP TABLE IF EXISTS Ensenyar;
@@ -12,6 +13,7 @@ DROP TABLE IF EXISTS Cliente;
 DROP TABLE IF EXISTS Limpiador;
 DROP TABLE IF EXISTS Recepcionista;
 DROP TABLE IF EXISTS Entrenador;
+DROP TABLE IF EXISTS Administrador;
 DROP TABLE IF EXISTS Empleados;
 DROP TABLE IF EXISTS Zona_Entrenos;
 DROP TABLE IF EXISTS Clases;
@@ -20,49 +22,49 @@ DROP TABLE IF EXISTS Vestuario;
 DROP TABLE IF EXISTS Registro_Acceso;
 DROP TABLE IF EXISTS Calculadora;
 DROP TABLE IF EXISTS Membresia;
-DROP TABLE IF EXISTS Mensajes_Contacto;
 
---MEMBRESIA
+
+-- MEMBRESIA
 CREATE TABLE Membresia (
     id INT PRIMARY KEY,
     tipo VARCHAR(50)
 );
 
---CALCULADORA IMC
+-- CALCULADORA IMC
 CREATE TABLE Calculadora (
     id INT PRIMARY KEY,
     IMC DECIMAL(5,2)
 );
 
---REGISTRO DE ACCESO
+-- REGISTRO DE ACCESO
 CREATE TABLE Registro_Acceso (
     codigo INT PRIMARY KEY
 );
 
---ZONAS
+-- ZONAS
 CREATE TABLE Vestuario (
     id INT PRIMARY KEY,
     genero VARCHAR(20)
 );
 
---NOMBRE DEL SPA
+-- NOMBRE DEL SPA
 CREATE TABLE Spa (
     nombre VARCHAR(50) PRIMARY KEY
 );
 
---TIPO DE CLASES
+-- TIPO DE CLASES
 CREATE TABLE Clases (
     codigo INT PRIMARY KEY,
     tipo VARCHAR(50)
 );
 
---ZONAS DE ENTRENO
+-- ZONAS DE ENTRENO
 CREATE TABLE Zona_Entrenos (
     id INT PRIMARY KEY,
     tipo VARCHAR(50)
 );
 
---DATOS EMPLEADOS
+-- DATOS EMPLEADOS
 CREATE TABLE Empleados (
     dni VARCHAR(20) PRIMARY KEY,
     telefono VARCHAR(20),
@@ -71,7 +73,7 @@ CREATE TABLE Empleados (
     apellido VARCHAR(50)
 );
 
---ADMINISTRADORES
+-- ADMINISTRADORES
 CREATE TABLE Administrador (
     id INT PRIMARY KEY,
     usuario VARCHAR(50) UNIQUE,
@@ -79,7 +81,7 @@ CREATE TABLE Administrador (
     nombre VARCHAR(50)
 );
 
---DATOS TIPOS DE EMPLEADOS
+-- DATOS TIPOS DE EMPLEADOS
 CREATE TABLE Entrenador (
     tipo_empleados VARCHAR(20) PRIMARY KEY,
     tipo VARCHAR(50),
@@ -98,7 +100,7 @@ CREATE TABLE Limpiador (
     FOREIGN KEY (tipo_empleados) REFERENCES Empleados(dni)
 );
 
---DATOS CLIENTES
+-- DATOS CLIENTES
 CREATE TABLE Cliente (
     dni VARCHAR(20) PRIMARY KEY,
     nombre VARCHAR(50),
@@ -106,13 +108,14 @@ CREATE TABLE Cliente (
     usuario VARCHAR(50) UNIQUE,
     contraseña VARCHAR(50),
     id_membresia INT,
-    imc DECIMAL(5,2),
+    id_calculadora INT,
     ultimo_acceso TIMESTAMP,
     fecha_compra DATE DEFAULT CURRENT_DATE,
-    FOREIGN KEY (id_membresia) REFERENCES Membresia(id)
+    FOREIGN KEY (id_membresia) REFERENCES Membresia(id),
+    FOREIGN KEY (id_calculadora) REFERENCES Calculadora(id)
 );
 
---REGISTRAR LA ENTRADA/SALIDA
+-- REGISTRAR LA ENTRADA/SALIDA
 CREATE TABLE Registrar_Entrada (
     codigo_registro_acceso INT,
     dni_cliente VARCHAR(20),
@@ -133,7 +136,7 @@ CREATE TABLE Registrar_Salida (
     FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni)
 );
 
---USAR VESTURAIO 
+-- USAR VESTUARIO 
 CREATE TABLE Usar (
     id_vestuario INT,
     dni_cliente VARCHAR(20),
@@ -142,7 +145,7 @@ CREATE TABLE Usar (
     FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni)
 );
 
---ACCEDER AL SPA
+-- ACCEDER AL SPA
 CREATE TABLE Acceder (
     nombre_spa VARCHAR(50),
     dni_cliente VARCHAR(20),
@@ -151,7 +154,7 @@ CREATE TABLE Acceder (
     FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni)
 );
 
---ASISTIR A CLASES
+-- ASISTIR A CLASES
 CREATE TABLE Asistir (
     codigo_clases INT,
     dni_cliente VARCHAR(20),
@@ -160,11 +163,11 @@ CREATE TABLE Asistir (
     FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni)
 );
 
---EMPLEADO ATIENE A CLIENTE
+-- EMPLEADO ATIENDE A CLIENTE
 CREATE TABLE Atender (
     dni_empleados VARCHAR(20),
     dni_cliente VARCHAR(20),
-    fecha DATE, -- 
+    fecha DATE,
     descripcion VARCHAR(255),
     PRIMARY KEY (dni_empleados, dni_cliente),
     FOREIGN KEY (dni_empleados) REFERENCES Empleados(dni),
@@ -182,7 +185,7 @@ CREATE TABLE Realizar (
     FOREIGN KEY (id_zona_entrenos) REFERENCES Zona_Entrenos(id)
 );
 
---UN ENTRENADOR PUEDE ENSEÑAR A OTRO ENTRENADOR
+-- UN ENTRENADOR PUEDE ENSEÑAR A OTRO ENTRENADOR
 CREATE TABLE Ensenyar (
     entrenador1 VARCHAR(20),
     entrenador2 VARCHAR(20),
@@ -191,7 +194,7 @@ CREATE TABLE Ensenyar (
     FOREIGN KEY (entrenador2) REFERENCES Entrenador(tipo_empleados)
 );
 
---LIMPIADORES LIMPIAN ZONAS
+-- LIMPIADORES LIMPIAN ZONAS
 CREATE TABLE Limpiar (
     turno_limpiador VARCHAR(20),
     id_zona_de_entrenos INT,
@@ -201,7 +204,6 @@ CREATE TABLE Limpiar (
     FOREIGN KEY (id_zona_de_entrenos) REFERENCES Zona_Entrenos(id)
 );
 
-
 -- ENTRENAR Clientes -> zonas de entreno
 CREATE TABLE Entrenar (
     dni_cliente VARCHAR(20),
@@ -210,7 +212,8 @@ CREATE TABLE Entrenar (
     FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni),
     FOREIGN KEY (id_zona_entrenos) REFERENCES Zona_Entrenos(id)
 );
--- Tabla de contacto que llega de la página web
+
+-- TABLA NUEVA: Contacto que llega de la página web
 CREATE TABLE Mensajes_Contacto (
     id SERIAL PRIMARY KEY,
     email VARCHAR(100),

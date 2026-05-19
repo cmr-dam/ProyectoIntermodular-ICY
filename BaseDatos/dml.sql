@@ -68,12 +68,13 @@ INSERT INTO Limpiador (tipo_empleados, turno) VALUES
 ('33333333C', 'Tarde'),
 ('11111111A', 'Mañana');
 
-INSERT INTO Cliente (dni, nombre, apellido, usuario, contraseña, id_membresia, id_calculadora, fecha_compra) VALUES 
-('99999999Z', 'Juan',  'Pérez',  'juanp', '1234', 2, 1, '2023-01-15'),
-('88888888Y', 'Maria', 'López',  'marial', '1234', 1, 2, '2023-03-10'),
-('77777777X', 'Luis',  'Torres', 'luist', '1234', 3, 3, '2023-06-20'),
-('66666666W', 'Sara',  'Díaz',   'sarad', '1234', 1, 1, '2023-09-05'),
-('55555555V', 'Marta', 'Ramos',  'martar', '1234', 2, 2, '2023-10-01');
+-- AQUÍ ESTÁ LA MAGIA: Inserts que funcionan perfectamente con la app de Java
+INSERT INTO Cliente (dni, nombre, apellido, usuario, contraseña, id_membresia, id_calculadora, ultimo_acceso, fecha_compra) VALUES 
+('99999999Z', 'Juan',  'Pérez',  'juanp', '1234', 2, 1, '2023-10-25 09:00:00', '2023-01-15'),
+('88888888Y', 'Maria', 'López',  'marial', '1234', 1, 2, '2023-10-25 10:30:00', '2023-03-10'),
+('77777777X', 'Luis',  'Torres', 'luist', '1234', 3, 3, '2023-10-26 08:45:00', '2023-06-20'),
+('66666666W', 'Sara',  'Díaz',   'sarad', '1234', 1, 1, '2023-10-26 11:00:00', '2023-09-05'),
+('55555555V', 'Marta', 'Ramos',  'martar', '1234', 2, 2, '2023-10-27 09:30:00', '2023-10-01');
 
 INSERT INTO Registrar_Entrada (codigo_registro_acceso, dni_cliente, fecha, hora) VALUES 
 (101, '99999999Z', '2023-10-25', '09:00:00'),

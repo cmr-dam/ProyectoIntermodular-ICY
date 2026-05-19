@@ -10,10 +10,11 @@
 <body>
     <header id="enlaces">
         <img src="./img/logo-gymstats-sinfondo.png" alt="Logo de la Empresa GYMSTATS">
-        <a href="#inicio">Inicio</a>
-        <a href="#tarifas">Tarifas</a> 
-        <a href="#sobre-nosotros">Sobre nosotros</a>
-        <a href="#seccionFormulario">Formulario</a>
+        <a href="index.html#inicio" data-lang="nav_inicio">Inicio</a>
+        <a href="index.html#tarifas" data-lang="nav_tarifas">Tarifas</a> 
+        <a href="rutinas.html" data-lang="nav_rutinas">Rutinas</a> <a href="index.html#sobre-nosotros" data-lang="nav_sobre_nosotros">Sobre nosotros</a>
+        <a href="index.html#seccionFormulario" data-lang="nav_formulario">Formulario</a>
+        
         <div style="display: flex; gap: 10px; margin-left: 20px;">
             <button id="btn-idioma" style="cursor: pointer; padding: 5px 10px; border-radius: 5px; border: none; background: #667eea; color: white;">EN</button>
             <button id="btn-tema" style="cursor: pointer; padding: 5px 10px; border-radius: 5px; border: none; background: #333; color: white;">🌙</button>
@@ -23,9 +24,6 @@
     <section id="inicio">
         <h1>GymStats</h1>
         <p data-lang="hero_desc">Software de gestión de gimnasios.</p>
-        <p style="margin-top: 15px; font-weight: bold;">
-            <span data-lang="clientes_activos">Clientes activos actualmente:</span> <span id="contador-clientes" style="color: #667eea; font-size: 1.5rem;">Cargando...</span>
-        </p>
     </section>
 
      <section id="tarifas">

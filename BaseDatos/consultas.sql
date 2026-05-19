@@ -190,5 +190,5 @@ HAVING COUNT(R.codigo_clases) >= (
         SELECT dni_entrenador, COUNT(codigo_clases) AS Total
         FROM Realizar
         GROUP BY dni_entrenador
-    )
+    ) AS Conteo
 );
