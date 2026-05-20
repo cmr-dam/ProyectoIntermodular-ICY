@@ -14,8 +14,14 @@ import java.awt.event.WindowEvent;
 public class PanelAdministrador extends JFrame {
 
     private static final long serialVersionUID = 1L;
+    
+    //SOCIOS
     private JTable tablaSocios;
     private DefaultTableModel modeloTabla;
+    
+    //PERSONAL
+    private JTable tablaPersonal;
+    private DefaultTableModel modeloTablaPersonal;
     
     private JPanel contentArea;
 
@@ -86,6 +92,234 @@ public class PanelAdministrador extends JFrame {
         ));
         return btn;
     }
+    
+    //Panel de inicio
+    private JPanel crearPanelInicio() {
+        JPanel panelInicio = new JPanel(new BorderLayout());
+        panelInicio.setBackground(fondoOscuro);
+        
+        JLabel titulo = new JLabel("Bienvenido a GymStats", SwingConstants.CENTER);
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 40));
+        titulo.setForeground(Color.WHITE);
+        
+        JLabel subtitulo = new JLabel("Selecciona una opción del menú lateral para gestionar el gimnasio", SwingConstants.CENTER);
+        subtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        subtitulo.setForeground(azulGym);
+        
+        JPanel centro = new JPanel();
+        centro.setLayout(new BoxLayout(centro, BoxLayout.Y_AXIS));
+        centro.setBackground(fondoOscuro);
+        
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        subtitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        centro.add(Box.createVerticalGlue());
+        centro.add(titulo);
+        centro.add(Box.createVerticalStrut(20));
+        centro.add(subtitulo);
+        centro.add(Box.createVerticalGlue());
+        
+        panelInicio.add(centro, BorderLayout.CENTER);
+        
+        return panelInicio;
+    }
+    
+    //Panel del personal
+    private JPanel crearPanelPersonal() {
+    	JPanel contenido = new JPanel(new BorderLayout(15, 15));
+        contenido.setBorder(new EmptyBorder(20, 20, 20, 20));
+        contenido.setBackground(fondoOscuro);
+
+        JLabel titulo = new JLabel("Gestión de Personal");
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 30));
+        titulo.setForeground(Color.WHITE);
+
+        JPanel cabecera = new JPanel(new BorderLayout());
+        cabecera.setBackground(fondoOscuro);
+        cabecera.add(titulo, BorderLayout.WEST);
+
+        // Panel de botones
+        JPanel botones = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        botones.setBackground(fondoOscuro);
+        
+        // BOTÓN AÑADIR
+        JButton btnAnadir = new JButton("Añadir");
+        btnAnadir.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        btnAnadir.setFocusPainted(false);
+        btnAnadir.setPreferredSize(new Dimension(140, 38));
+        btnAnadir.setBackground(azulGym);
+        btnAnadir.setForeground(Color.BLACK);
+        btnAnadir.setContentAreaFilled(false);
+        btnAnadir.setOpaque(true);
+        btnAnadir.setBorderPainted(true);
+        btnAnadir.setBorder(new LineBorder(azulGym, 1, true));
+        btnAnadir.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    AñadirEmpleado vEmp = new AñadirEmpleado(PanelAdministrador.this);
+                    setVisible(false);
+                    vEmp.setVisible(true);
+                } catch(Exception crear) {
+                    JOptionPane.showMessageDialog(PanelAdministrador.this, "Error al abrir la ventana.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        
+        // BOTÓN MODIFICAR
+        JButton btnModificar = new JButton("Modificar");
+        btnModificar.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        btnModificar.setFocusPainted(false);
+        btnModificar.setPreferredSize(new Dimension(140, 38));
+        btnModificar.setBackground(azulGym);
+        btnModificar.setForeground(Color.BLACK);
+        btnModificar.setContentAreaFilled(false);
+        btnModificar.setOpaque(true);
+        btnModificar.setBorderPainted(true);
+        btnModificar.setBorder(new LineBorder(azulGym, 1, true));
+        btnModificar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int fila = tablaPersonal.getSelectedRow();
+                
+                if(fila != -1) {
+                    JOptionPane.showMessageDialog(PanelAdministrador.this, "Falta crear la ventana ModificarEmpleado");
+                } else {
+                    JOptionPane.showMessageDialog(PanelAdministrador.this, "Debes seleccionar un empleado", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        // BOTÓN ELIMINAR
+        JButton btnEliminar = new JButton("Eliminar");
+        btnEliminar.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        btnEliminar.setFocusPainted(false);
+        btnEliminar.setPreferredSize(new Dimension(140, 38));
+        btnEliminar.setBackground(azulGym);
+        btnEliminar.setForeground(Color.BLACK);
+        btnEliminar.setContentAreaFilled(false);
+        btnEliminar.setOpaque(true);
+        btnEliminar.setBorderPainted(true);
+        btnEliminar.setBorder(new LineBorder(azulGym, 1, true));
+        btnEliminar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int filaSeleccionada = tablaPersonal.getSelectedRow();
+                
+                if(filaSeleccionada != -1) {
+                    String dni = tablaPersonal.getValueAt(filaSeleccionada, 0).toString();
+                    int confirmar = JOptionPane.showConfirmDialog(PanelAdministrador.this, "¿Seguro que quieres despedir a este empleado?", "Despedir", JOptionPane.YES_NO_OPTION);
+                    
+                    if(confirmar == JOptionPane.YES_OPTION) {
+                        try {
+                            Connection con = Main.getConectar();
+                            String sql = "DELETE FROM Empleados WHERE dni = ?";
+                            PreparedStatement pstmt = con.prepareStatement(sql);
+                            pstmt.setString(1, dni);
+                            
+                            int resultado = pstmt.executeUpdate();
+                            if(resultado > 0) {
+                                modeloTablaPersonal.removeRow(filaSeleccionada);
+                                JOptionPane.showMessageDialog(PanelAdministrador.this, "Empleado eliminado correctamente", "Borrado", JOptionPane.INFORMATION_MESSAGE);
+                            }
+                            pstmt.close();
+                        } catch(Exception ex) {
+                            JOptionPane.showMessageDialog(PanelAdministrador.this, "No se puede borrar porque está asignado a otra tabla (ej: Entrenador). Borra primero su puesto.", "Error de clave", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(PanelAdministrador.this, "Debes seleccionar una fila", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        // BOTÓN ACTUALIZAR
+        JButton btnActualizar = new JButton("Actualizar");
+        btnActualizar.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        btnActualizar.setFocusPainted(false);
+        btnActualizar.setPreferredSize(new Dimension(140, 38));
+        btnActualizar.setBackground(azulGym);
+        btnActualizar.setForeground(Color.BLACK);
+        btnActualizar.setContentAreaFilled(false);
+        btnActualizar.setOpaque(true);
+        btnActualizar.setBorderPainted(true);
+        btnActualizar.setBorder(new LineBorder(azulGym, 1, true));
+        btnActualizar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cargarDatosPersonal();
+            }
+        });
+
+        //Añadimos los botones al panel
+        botones.add(btnAnadir);
+        botones.add(btnModificar);
+        botones.add(btnEliminar);
+        botones.add(btnActualizar);
+
+        JPanel zonaSuperior = new JPanel();
+        zonaSuperior.setLayout(new BoxLayout(zonaSuperior, BoxLayout.Y_AXIS));
+        zonaSuperior.setBackground(fondoOscuro);
+        zonaSuperior.add(cabecera);
+        zonaSuperior.add(Box.createVerticalStrut(15));
+        zonaSuperior.add(botones);
+
+        contenido.add(zonaSuperior, BorderLayout.NORTH);
+
+        //Creamos la tabla de empleados
+        String[] columnas = {"DNI", "Nombre", "Apellido", "Teléfono", "Nómina"};
+        modeloTablaPersonal = new DefaultTableModel(columnas, 0);
+        tablaPersonal = new JTable(modeloTablaPersonal);
+
+        tablaPersonal.setRowHeight(30);
+        tablaPersonal.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        tablaPersonal.setBackground(grisInput);
+        tablaPersonal.setForeground(Color.WHITE);
+        tablaPersonal.setGridColor(fondoOscuro);
+        tablaPersonal.setSelectionBackground(azulGym);
+        tablaPersonal.setSelectionForeground(Color.BLACK);
+        tablaPersonal.setBorder(new LineBorder(azulGym, 1));
+
+        JTableHeader header = tablaPersonal.getTableHeader();
+        header.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        header.setBackground(azulGym);
+        header.setForeground(Color.BLACK);
+        header.setReorderingAllowed(false);
+
+        JScrollPane scroll = new JScrollPane(tablaPersonal);
+        scroll.getViewport().setBackground(grisInput);
+        scroll.setBackground(grisInput);
+        scroll.setBorder(new LineBorder(azulGym, 1));
+
+        contenido.add(scroll, BorderLayout.CENTER);
+
+        //Cargamos los datos al crear el panel
+        cargarDatosPersonal();
+
+        return contenido;
+    }
+
+    //Panel de gestion de actividades
+    private JPanel crearPanelActividades() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(fondoOscuro);
+        
+        JLabel titulo = new JLabel("Gestión de Actividades (En desarrollo...)", SwingConstants.CENTER);
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 30));
+        titulo.setForeground(azulGym);
+        
+        panel.add(titulo, BorderLayout.CENTER);
+        return panel;
+    }
+
+    //Panel de acceso
+    private JPanel crearPanelAcceso() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(fondoOscuro);
+        
+        JLabel titulo = new JLabel("Control de Accesos (En desarrollo...)", SwingConstants.CENTER);
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 30));
+        titulo.setForeground(azulGym);
+        
+        panel.add(titulo, BorderLayout.CENTER);
+        return panel;
+    }
 
     //Panel lateral
     private JPanel crearSidebar() {
@@ -108,7 +342,7 @@ public class PanelAdministrador extends JFrame {
         JButton btnInicio = crearBotonMenu("Inicio");
         btnInicio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //Logica de inicio
+            	mostrarPanel(crearPanelInicio());
             }
         });
         
@@ -121,8 +355,25 @@ public class PanelAdministrador extends JFrame {
         });
 
         JButton btnPersonal = crearBotonMenu("Personal");
+        btnPersonal.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarPanel(crearPanelPersonal());
+            }
+        });
+
         JButton btnActividades = crearBotonMenu("Actividades");
+        btnActividades.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarPanel(crearPanelActividades());
+            }
+        });
+
         JButton btnAcceso = crearBotonMenu("Acceso");
+        btnAcceso.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarPanel(crearPanelAcceso());
+            }
+        });
 
         //Añadimos los botones al menu
         menu.add(btnInicio);
@@ -373,6 +624,43 @@ public class PanelAdministrador extends JFrame {
             
         } catch(SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al cargar la lista de socios.");
+            e.printStackTrace();
+        }
+    }
+    
+    //Metodo cargar datos de el personal
+    public void cargarDatosPersonal() {
+        modeloTablaPersonal.setRowCount(0);
+        
+        try {
+            Connection con = Main.getConectar();
+            String sql = "SELECT dni, nombre, apellido, telefono, nomina FROM Empleados";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            
+            while(rs.next()) {
+                String dni = rs.getString("dni");
+                String nombre = rs.getString("nombre");
+                String apellido = rs.getString("apellido");
+                String telefono = rs.getString("telefono");
+                double nomina = rs.getDouble("nomina");
+                
+                Object[] fila = {
+                    dni, 
+                    nombre, 
+                    apellido, 
+                    telefono, 
+                    nomina + " €"
+                };
+                
+                modeloTablaPersonal.addRow(fila);
+            }
+            
+            rs.close();
+            pstmt.close();
+            
+        } catch(SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar la lista de personal.");
             e.printStackTrace();
         }
     }
