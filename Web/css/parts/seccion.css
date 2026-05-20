@@ -1,18 +1,19 @@
-/* Sección inicio */
 #inicio {
     text-align: center;
-    padding: 6rem 2rem;
+    padding: 8rem 2rem;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
 }
 
 #inicio h1 {
-    font-size: 4rem;
+    font-size: 4.5rem;
     margin-bottom: 1rem;
-    font-weight: 700;
+    font-weight: 800;
+    letter-spacing: -1px;
 }
 
 #inicio p {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     opacity: 0.9;
+    font-weight: 300;
 }

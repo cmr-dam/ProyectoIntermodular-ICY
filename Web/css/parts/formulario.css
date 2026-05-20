@@ -1,61 +1,120 @@
-/* Formulario */
 #seccionFormulario {
-    padding: 4rem 2rem;
-    background: #f8f9fa;
-    text-align: center;
+    padding: 5rem 1rem;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #seccionFormulario h2 {
     font-size: 2.5rem;
     margin-bottom: 2rem;
-    color: #667eea;
+    color: inherit;
 }
 
-#seccionFormulario div {
-    margin: 1.5rem auto;
-    max-width: 500px;
+#seccionFormulario form {
+    background: #ffffff;
+    padding: 3rem 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 600px;
+    text-align: left;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
 }
 
-label {
+#seccionFormulario label {
     display: block;
     margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #555;
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 0.95rem;
 }
 
-input, textarea {
+#seccionFormulario input[type="email"], 
+#seccionFormulario input[type="tel"], 
+#seccionFormulario textarea {
     width: 100%;
-    padding: 0.8rem;
-    border: 2px solid #ddd;
-    border-radius: 8px;
+    box-sizing: border-box; 
+    padding: 1rem;
+    border: 2px solid #e2e8f0;
+    background-color: #f8fafc;
+    border-radius: 10px;
     font-size: 1rem;
-    transition: border-color 0.3s;
+    color: #2d3748;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
 }
 
-input:focus, textarea:focus {
+#seccionFormulario input:focus, 
+#seccionFormulario textarea:focus {
     outline: none;
     border-color: #667eea;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
 
-textarea {
+#seccionFormulario textarea {
     min-height: 120px;
     resize: vertical;
 }
 
-button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 1rem 3rem;
-    border: none;
-    border-radius: 25px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    margin-top: 1rem;
-    transition: transform 0.3s;
-    box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+.label_empresas {
+    text-align: center;
+    margin-top: 0.5rem;
 }
 
-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(102,126,234,0.5);
+#seccionFormulario input[type="checkbox"] {
+    display: block;
+    margin: 10px auto 25px auto;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #667eea;
+}
+
+#seccionFormulario button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.2rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(102,126,234,0.3);
+}
+
+#seccionFormulario button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(102,126,234,0.4);
+}
+
+
+body.modo-oscuro #seccionFormulario form {
+    background: #1e293b;
+    border-color: #334155;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+body.modo-oscuro #seccionFormulario label {
+    color: #e2e8f0;
+}
+
+body.modo-oscuro #seccionFormulario input[type="email"], 
+body.modo-oscuro #seccionFormulario input[type="tel"], 
+body.modo-oscuro #seccionFormulario textarea {
+    background-color: #0f172a;
+    border-color: #334155;
+    color: #f8fafc;
+}
+
+body.modo-oscuro #seccionFormulario input:focus, 
+body.modo-oscuro #seccionFormulario textarea:focus {
+    border-color: #667eea;
+    background-color: #1e293b;
 }

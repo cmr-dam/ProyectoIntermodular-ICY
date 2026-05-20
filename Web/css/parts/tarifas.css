@@ -1,41 +1,46 @@
-/* tarifas.css */
 #tarifas {
+    padding: 5rem 2rem;
+    text-align: center;
+    background-color: #f7fafc;
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: stretch;
-    gap: 3vw;
-    width: 100%;
+    gap: 2rem;
 }
 
 #tarifas h2 {
     width: 100%;
-    text-align: center;
-    flex-basis: 100%;
+    font-size: 2.5rem;
+    color: #4a5568;
+    margin-bottom: 2rem;
 }
 
 #tarifas > div {
-    background-color: rgba(30, 144, 255, 0.05);
-    border: 0.15rem solid rgba(30, 144, 255, 0.3);
-    border-radius: 1rem;
-    padding: 3rem 2vw;
-    width: 30%;
-    min-width: 20rem;
+    background: white;
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    width: 300px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0;
 }
 
 #tarifas > div:hover {
-    transform: translateY(-0.5rem);
-    border-color: #1E90FF;
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(102,126,234,0.15);
+    border-color: #667eea;
 }
 
-#precio {
-    font-size: 2.5rem;
-    color: #1E90FF;
+#tarifas h3 {
+    color: #4a5568;
+    font-size: 1.5rem;
+}
+
+.precio {
+    font-size: 2.8rem;
     font-weight: 700;
-    margin-top: 1rem;
+    color: #667eea;
+    margin: 1.5rem 0;
 }
