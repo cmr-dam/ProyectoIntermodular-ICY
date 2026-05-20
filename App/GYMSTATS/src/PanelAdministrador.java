@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
@@ -59,9 +58,8 @@ public class PanelAdministrador extends JFrame {
         getContentPane().add(crearSidebar(), BorderLayout.WEST);
         getContentPane().add(contentArea, BorderLayout.CENTER);
         
-        //Una vez se crea lo visual, mostramos el contenido inicial y cargamos los datos
-        mostrarPanel(crearContenido());
-        cargarDatosSocios();
+        //Una vez se crea lo visual, mostramos el panel de inicio
+        mostrarPanel(crearPanelInicio());
     }
     
     //Metodo principal para cambiar los paneles
