@@ -1,0 +1,49 @@
+/* Responsive */
+
+/* Pantallas medianas (Tablets) */
+@media (max-width: 900px) {
+    header#enlaces {
+        gap: 1.5rem;
+        flex-wrap: wrap; 
+    }
+    #enlaces a {
+        font-size: 0.95rem;
+    }
+}
+
+/* Pantallas pequeñas (Móviles como google pixel 9 o Samgsung S25)*/
+@media (max-width: 600px) {
+    header#enlaces {
+        gap: 12px;
+        padding: 1rem 0.5rem;
+    }
+    
+    #enlaces img {
+        height: 40px;
+    }
+
+    #enlaces a {
+        font-size: 0.85rem;
+    }
+
+    /* Forzamos que los botones (Idioma/Modo Oscuro) se centren abajo del menú */
+    header#enlaces div[style] {
+        margin-left: 0 !important; 
+        width: 100%;
+        justify-content: center;
+        margin-top: 5px;
+    }
+
+    #inicio {
+        padding: 3rem 1rem !important;
+    }
+
+    #inicio h1 {
+        font-size: 2.2rem !important;
+        line-height: 1.2;
+    }
+
+    #inicio p {
+        font-size: 1.1rem !important;
+    }
+}

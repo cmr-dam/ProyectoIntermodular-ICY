@@ -3,9 +3,9 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
 $host = "localhost";
-$db_name = "tu_base_de_datos"; // CAMBIA ESTO por el nombre de tu BDD
-$username = "postgres";        // CAMBIA ESTO por tu usuario
-$password = "tu_contraseña";   // CAMBIA ESTO por tu contraseña
+$db_name = "Gymstats"; 
+$username = "postgres";        
+$password = "1234"; 
 
 try {
     $conexion = new PDO("pgsql:host=$host;dbname=$db_name", $username, $password);

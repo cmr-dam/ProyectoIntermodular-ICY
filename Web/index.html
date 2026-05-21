@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GymStats</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="img/logo-gymstats-sinfondo.png" type="image/png">
 </head>
 
 <body>
@@ -12,9 +13,10 @@
         <img src="./img/logo-gymstats-sinfondo.png" alt="Logo de la Empresa GYMSTATS">
         <a href="index.html#inicio" data-lang="nav_inicio">Inicio</a>
         <a href="index.html#tarifas" data-lang="nav_tarifas">Tarifas</a> 
-        <a href="rutinas.html" data-lang="nav_rutinas">Rutinas</a> <a href="index.html#sobre-nosotros" data-lang="nav_sobre_nosotros">Sobre nosotros</a>
+        <a href="index.html#sobre-nosotros" data-lang="nav_sobre_nosotros">Sobre nosotros</a>
         <a href="index.html#seccionFormulario" data-lang="nav_formulario">Formulario</a>
-        
+        <a href="rutinas.html" data-lang="nav_rutinas">Rutinas</a> 
+
         <div style="display: flex; gap: 10px; margin-left: 20px;">
             <button id="btn-idioma" style="cursor: pointer; padding: 5px 10px; border-radius: 5px; border: none; background: #667eea; color: white;">EN</button>
             <button id="btn-tema" style="cursor: pointer; padding: 5px 10px; border-radius: 5px; border: none; background: #333; color: white;">🌙</button>
@@ -24,6 +26,10 @@
     <section id="inicio">
         <h1>GymStats</h1>
         <p data-lang="hero_desc">Software de gestión de gimnasios.</p>
+        <p style="margin-top: 15px; font-weight: bold;">
+            <span data-lang="clientes_activos">Clientes activos actualmente:</span> 
+            <span id="contador-clientes" style="color: #667eea; font-size: 1.5rem;">Cargando...</span>
+        </p>
     </section>
 
      <section id="tarifas">
@@ -85,7 +91,7 @@
             <div id="seccionEmail">
                 <label for="email" data-lang="label_email">Correo Electronico:</label>
                 <input type="email" id="email" required 
-                    pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}"
+                    pattern="[a-zA-Z0-9._%\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,6}"
                     title="Introduce un correo electrónico válido (ej: usuario@dominio.com)">
             </div>
 
@@ -94,6 +100,7 @@
                 <input type="tel" id="telefono" required
                     pattern="\+?[0-9]{9,15}"
                     minlength="9"
+                    maxlength="9"
                     title="Introduce al menos 9 números. Opcionalmente puede empezar por +">
             </div>
 
@@ -104,7 +111,11 @@
 
             <div>
                 <label data-lang="label_empresa">Eres una empresa?</label>
-                <input type="checkbox">
+                <input type="checkbox" id="es_empresa">
+            </div>
+            
+            <div style="margin-top: 10px; margin-bottom: 10px; font-weight: bold; min-height: 20px;">
+                <span id="form-respuesta"></span>
             </div>
             
             <button type="submit" data-lang="btn_enviar">Enviar Solicitud</button>
@@ -112,7 +123,7 @@
     </section>
 
     <footer>
-        <p>Gymstats - Carlos, Yon e Ian</p>
+        <p>COPYRIGHT © 2026 | GymStats | All rights reserved</p>
     </footer>
     <script src="js/script.js"></script>
 </body> 
