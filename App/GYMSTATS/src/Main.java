@@ -1,5 +1,6 @@
 import java.sql.*;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.FlatDarkLaf;
 
 public class Main {
 	
@@ -8,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         //Aplicamos el estilo
         try { 
-        	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
+        	UIManager.setLookAndFeel(new FlatDarkLaf());
         } catch (Exception e) {
         	System.out.println("No se ha podido aplicar el estilo.");
         	e.printStackTrace();

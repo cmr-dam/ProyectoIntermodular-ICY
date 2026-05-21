@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class PanelAdministrador extends JFrame {
 
@@ -21,6 +23,9 @@ public class PanelAdministrador extends JFrame {
     //PERSONAL
     private JTable tablaPersonal;
     private DefaultTableModel modeloTablaPersonal;
+    
+    private JTable tablaContacto;
+    private DefaultTableModel modeloTablaContacto;
     
     private JPanel contentArea;
 
@@ -74,20 +79,25 @@ public class PanelAdministrador extends JFrame {
     private JButton crearBotonMenu(String texto) {
         JButton btn = new JButton(texto);
         btn.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        btn.setForeground(Color.WHITE);
-        btn.setBackground(grisInput);
+        
+        btn.setBackground(azulGym);
+        btn.setForeground(Color.BLACK);
+        
         btn.setFocusPainted(false);
         btn.setHorizontalAlignment(SwingConstants.LEFT);
         btn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 58));
         btn.setPreferredSize(new Dimension(220, 58));
+        
         btn.setMargin(new Insets(8, 15, 8, 15));
-        btn.setContentAreaFilled(false);
+
         btn.setOpaque(true);
-        btn.setBorderPainted(true);
-        btn.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(azulGym, 1, true),
-                new EmptyBorder(8, 12, 8, 12)
-        ));
+        btn.setBorderPainted(false);
+        
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+//        btn.setBorder(BorderFactory.createCompoundBorder(
+//                new LineBorder(azulGym, 1, true),
+//                new EmptyBorder(8, 12, 8, 12)
+//        ));
         return btn;
     }
     
@@ -147,7 +157,7 @@ public class PanelAdministrador extends JFrame {
         btnAnadir.setPreferredSize(new Dimension(140, 38));
         btnAnadir.setBackground(azulGym);
         btnAnadir.setForeground(Color.BLACK);
-        btnAnadir.setContentAreaFilled(false);
+
         btnAnadir.setOpaque(true);
         btnAnadir.setBorderPainted(true);
         btnAnadir.setBorder(new LineBorder(azulGym, 1, true));
@@ -170,7 +180,7 @@ public class PanelAdministrador extends JFrame {
         btnModificar.setPreferredSize(new Dimension(140, 38));
         btnModificar.setBackground(azulGym);
         btnModificar.setForeground(Color.BLACK);
-        btnModificar.setContentAreaFilled(false);
+
         btnModificar.setOpaque(true);
         btnModificar.setBorderPainted(true);
         btnModificar.setBorder(new LineBorder(azulGym, 1, true));
@@ -193,7 +203,7 @@ public class PanelAdministrador extends JFrame {
         btnEliminar.setPreferredSize(new Dimension(140, 38));
         btnEliminar.setBackground(azulGym);
         btnEliminar.setForeground(Color.BLACK);
-        btnEliminar.setContentAreaFilled(false);
+
         btnEliminar.setOpaque(true);
         btnEliminar.setBorderPainted(true);
         btnEliminar.setBorder(new LineBorder(azulGym, 1, true));
@@ -235,7 +245,7 @@ public class PanelAdministrador extends JFrame {
         btnActualizar.setPreferredSize(new Dimension(140, 38));
         btnActualizar.setBackground(azulGym);
         btnActualizar.setForeground(Color.BLACK);
-        btnActualizar.setContentAreaFilled(false);
+
         btnActualizar.setOpaque(true);
         btnActualizar.setBorderPainted(true);
         btnActualizar.setBorder(new LineBorder(azulGym, 1, true));
@@ -283,7 +293,7 @@ public class PanelAdministrador extends JFrame {
         JScrollPane scroll = new JScrollPane(tablaPersonal);
         scroll.getViewport().setBackground(grisInput);
         scroll.setBackground(grisInput);
-        scroll.setBorder(new LineBorder(azulGym, 1));
+//        scroll.setBorder(new LineBorder(azulGym, 1));
 
         contenido.add(scroll, BorderLayout.CENTER);
 
@@ -318,6 +328,103 @@ public class PanelAdministrador extends JFrame {
         panel.add(titulo, BorderLayout.CENTER);
         return panel;
     }
+    
+    
+    private JPanel crearPanelContacto() {
+        JPanel contenido = new JPanel(new BorderLayout(15, 15));
+        contenido.setBorder(new EmptyBorder(20, 20, 20, 20));
+        contenido.setBackground(fondoOscuro);
+
+        JLabel titulo = new JLabel("Mensajes de Contacto");
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 30));
+        titulo.setForeground(Color.WHITE);
+
+        JPanel cabecera = new JPanel(new BorderLayout());
+        cabecera.setBackground(fondoOscuro);
+        cabecera.add(titulo, BorderLayout.WEST);
+
+        JPanel botones = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        botones.setBackground(fondoOscuro);
+        
+        // BOTÓN ACTUALIZAR (VERSIÓN CLÁSICA NOOB-FRIENDLY)
+        JButton btnActualizar = new JButton("Actualizar");
+        btnActualizar.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        btnActualizar.setFocusPainted(false);
+        btnActualizar.setPreferredSize(new Dimension(140, 38));
+        btnActualizar.setBackground(azulGym);
+        btnActualizar.setForeground(Color.BLACK);
+        btnActualizar.setOpaque(true);
+        btnActualizar.setBorderPainted(true);
+        btnActualizar.setBorder(new LineBorder(azulGym, 1, true));
+        btnActualizar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cargarDatosContacto();
+            }
+        });
+
+        JLabel lblInstrucciones = new JLabel(" Haz doble clic en una fila para leer el mensaje completo");
+        lblInstrucciones.setForeground(Color.GRAY);
+        lblInstrucciones.setFont(new Font("Segoe UI", Font.ITALIC, 14));
+
+        botones.add(btnActualizar);
+        botones.add(lblInstrucciones);
+
+        JPanel zonaSuperior = new JPanel();
+        zonaSuperior.setLayout(new BoxLayout(zonaSuperior, BoxLayout.Y_AXIS));
+        zonaSuperior.setBackground(fondoOscuro);
+        zonaSuperior.add(cabecera);
+        zonaSuperior.add(Box.createVerticalStrut(15));
+        zonaSuperior.add(botones);
+
+        contenido.add(zonaSuperior, BorderLayout.NORTH);
+
+        String[] columnas = {"ID", "Email", "Teléfono", "Tipo de cliente"};
+        
+        // TABLA BÁSICA
+        modeloTablaContacto = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; 
+            }
+        };
+        tablaContacto = new JTable(modeloTablaContacto);
+
+        tablaContacto.setRowHeight(30);
+        tablaContacto.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        tablaContacto.setBackground(grisInput);
+        tablaContacto.setForeground(Color.WHITE);
+        tablaContacto.setGridColor(fondoOscuro);
+        tablaContacto.setSelectionBackground(azulGym);
+        tablaContacto.setSelectionForeground(Color.BLACK);
+        tablaContacto.setBorder(new LineBorder(azulGym, 1));
+
+        JTableHeader header = tablaContacto.getTableHeader();
+        header.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        header.setBackground(azulGym);
+        header.setForeground(Color.BLACK);
+        header.setReorderingAllowed(false);
+
+        // EVENTO DEL DOBLE CLIC (VERSIÓN CLÁSICA)
+        tablaContacto.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent me) {
+                if (me.getClickCount() == 2) {
+                    int filaSeleccionada = tablaContacto.getSelectedRow();
+                    if (filaSeleccionada != -1) {
+                        String idContacto = tablaContacto.getValueAt(filaSeleccionada, 0).toString();
+                        verMensajeCompleto(idContacto);
+                    }
+                }
+            }
+        });
+
+        JScrollPane scroll = new JScrollPane(tablaContacto);
+        scroll.getViewport().setBackground(grisInput);
+        scroll.setBackground(grisInput);
+
+        contenido.add(scroll, BorderLayout.CENTER);
+
+        return contenido;
+    }    
 
     //Panel lateral
     private JPanel crearSidebar() {
@@ -372,6 +479,15 @@ public class PanelAdministrador extends JFrame {
                 mostrarPanel(crearPanelAcceso());
             }
         });
+        
+     // --- BOTÓN CONTACTO ---
+        JButton btnContacto = crearBotonMenu("Contacto");
+        btnContacto.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarPanel(crearPanelContacto());
+                cargarDatosContacto(); 
+            }
+        });
 
         //Añadimos los botones al menu
         menu.add(btnInicio);
@@ -383,7 +499,9 @@ public class PanelAdministrador extends JFrame {
         menu.add(btnActividades);
         menu.add(Box.createVerticalStrut(12));
         menu.add(btnAcceso);
-
+        menu.add(Box.createVerticalStrut(12));
+        menu.add(btnContacto);
+        
         sidebar.add(titulo, BorderLayout.NORTH);
         sidebar.add(menu, BorderLayout.CENTER);
 
@@ -415,7 +533,7 @@ public class PanelAdministrador extends JFrame {
         btnAnadir.setPreferredSize(new Dimension(140, 38));
         btnAnadir.setBackground(azulGym);
         btnAnadir.setForeground(Color.BLACK);
-        btnAnadir.setContentAreaFilled(false);
+
         btnAnadir.setOpaque(true);
         btnAnadir.setBorderPainted(true);
         btnAnadir.setBorder(new LineBorder(azulGym, 1, true));
@@ -438,7 +556,7 @@ public class PanelAdministrador extends JFrame {
         btnActualizar.setPreferredSize(new Dimension(140, 38));
         btnActualizar.setBackground(azulGym);
         btnActualizar.setForeground(Color.BLACK);
-        btnActualizar.setContentAreaFilled(false);
+
         btnActualizar.setOpaque(true);
         btnActualizar.setBorderPainted(true);
         btnActualizar.setBorder(new LineBorder(azulGym, 1, true));
@@ -456,7 +574,7 @@ public class PanelAdministrador extends JFrame {
         btnModificar.setPreferredSize(new Dimension(140, 38));
         btnModificar.setBackground(azulGym);
         btnModificar.setForeground(Color.BLACK);
-        btnModificar.setContentAreaFilled(false);
+
         btnModificar.setOpaque(true);
         btnModificar.setBorderPainted(true);
         btnModificar.setBorder(new LineBorder(azulGym, 1, true));
@@ -485,7 +603,7 @@ public class PanelAdministrador extends JFrame {
         btnEliminar.setPreferredSize(new Dimension(140, 38));
         btnEliminar.setBackground(azulGym);
         btnEliminar.setForeground(Color.BLACK);
-        btnEliminar.setContentAreaFilled(false);
+
         btnEliminar.setOpaque(true);
         btnEliminar.setBorderPainted(true);
         btnEliminar.setBorder(new LineBorder(azulGym, 1, true));
@@ -565,7 +683,7 @@ public class PanelAdministrador extends JFrame {
         JScrollPane scroll = new JScrollPane(tablaSocios);
         scroll.getViewport().setBackground(grisInput);
         scroll.setBackground(grisInput);
-        scroll.setBorder(new LineBorder(azulGym, 1));
+//        scroll.setBorder(new LineBorder(azulGym, 1));
 
         contenido.add(scroll, BorderLayout.CENTER);
 
@@ -661,6 +779,90 @@ public class PanelAdministrador extends JFrame {
             
         } catch(SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al cargar la lista de personal.");
+            e.printStackTrace();
+        }
+    }
+    
+    
+    public void cargarDatosContacto() {
+        modeloTablaContacto.setRowCount(0);
+        try {
+            Connection con = Main.getConectar();
+            String sql = "SELECT id, email, telefono, es_empresa FROM Mensajes_Contacto ORDER BY id DESC";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            
+            while(rs.next()) {
+                int id = rs.getInt("id");
+                String email = rs.getString("email");
+                String telefono = rs.getString("telefono");
+                boolean esEmpresa = rs.getBoolean("es_empresa");
+                
+                String tipo = "";
+                if(esEmpresa == true) {
+                    tipo = "Empresa";
+                } else {
+                    tipo = "Particular";
+                }
+                
+                Object[] fila = { id, email, telefono, tipo };
+                modeloTablaContacto.addRow(fila);
+            }
+            rs.close();
+            pstmt.close();
+        } catch(SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar la lista de contacto.");
+            e.printStackTrace();
+        }
+    }
+
+    private void verMensajeCompleto(String idContacto) {
+        try {
+            Connection con = Main.getConectar();
+            String sql = "SELECT email, telefono, mensaje, es_empresa FROM Mensajes_Contacto WHERE id = ?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, Integer.parseInt(idContacto));
+            ResultSet rs = pstmt.executeQuery();
+
+            if(rs.next()) {
+                String email = rs.getString("email");
+                String telefono = rs.getString("telefono");
+                String msj = rs.getString("mensaje");
+                boolean empresa = rs.getBoolean("es_empresa");
+
+                String tipo = "";
+                if(empresa == true) {
+                    tipo = "Empresa";
+                } else {
+                    tipo = "Particular";
+                }
+
+                String infoContacto = "De: " + email + " \n"
+                                    + "Tlf: " + telefono + " \n"
+                                    + "Tipo: " + tipo + " \n"
+                                    + "--------------------------------------------------------\n"
+                                    + msj;
+
+                JTextArea areaMensaje = new JTextArea(infoContacto);
+                areaMensaje.setEditable(false);
+                areaMensaje.setLineWrap(true);
+                areaMensaje.setWrapStyleWord(true);
+                areaMensaje.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+                areaMensaje.setBackground(grisInput);
+                areaMensaje.setForeground(Color.WHITE);
+                areaMensaje.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+                JScrollPane scrollPane = new JScrollPane(areaMensaje);
+                scrollPane.setPreferredSize(new Dimension(500, 300));
+                scrollPane.setBorder(new LineBorder(azulGym, 1));
+
+                JOptionPane.showMessageDialog(this, scrollPane, "Leyendo Mensaje #" + idContacto, JOptionPane.PLAIN_MESSAGE);
+            }
+            
+            rs.close();
+            pstmt.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al abrir el mensaje.");
             e.printStackTrace();
         }
     }

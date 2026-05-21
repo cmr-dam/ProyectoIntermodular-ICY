@@ -213,7 +213,7 @@ CREATE TABLE Entrenar (
     FOREIGN KEY (id_zona_entrenos) REFERENCES Zona_Entrenos(id)
 );
 
--- TABLA NUEVA: Contacto que llega de la página web
+-- Contacto que llega de la página web
 CREATE TABLE Mensajes_Contacto (
     id SERIAL PRIMARY KEY,
     email VARCHAR(100),

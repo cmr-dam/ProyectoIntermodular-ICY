@@ -143,7 +143,7 @@ public class PanelLogin extends JFrame {
         		            dispose();
         		        } else {
         		            //Si no hay coincidencia, las credenciales son incorrectas
-        		            lblMensaje.setText("Usuario o contraseña incorrectos.");
+        		            lblMensaje.setText("Usuario/contraseña incorrectos.");
         		            txtPassword.setText(""); //Limpiamos la contraseña
         		        }
         		        
