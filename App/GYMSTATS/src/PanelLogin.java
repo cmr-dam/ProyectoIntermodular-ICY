@@ -98,7 +98,7 @@ public class PanelLogin extends JFrame {
         		    Connection con = Main.getConectar();
         		    
         		    //Ejecutamos la consulta con PreparedStatement
-        		    String sql = "SELECT nombre FROM Cliente WHERE usuario = ? AND contraseña = ?"; //Usamos el ? para que se rellene el parametro
+        		    String sql = "SELECT dni, nombre FROM Cliente WHERE usuario = ? AND contraseña = ?"; //Usamos el ? para que se rellene el parametro
         		    PreparedStatement pstmt = con.prepareStatement(sql);
         		    pstmt.setString(1, user);
         		    pstmt.setString(2, passwd);
@@ -108,10 +108,17 @@ public class PanelLogin extends JFrame {
         		    //Si rs.next() es true, ese usuario existira en la base
         		    //Primero buscamos clientes
         		    if(rs.next()) {
+        		        String dniCliente = rs.getString("dni");
         		        String nombreCliente = rs.getString("nombre"); //Recogemos el nombre
         		        
+        		        String sqlAcceso = "UPDATE Cliente SET ultimo_acceso = CURRENT_TIMESTAMP WHERE dni = ?";
+        		        PreparedStatement pstmtAcceso = con.prepareStatement(sqlAcceso);
+        		        pstmtAcceso.setString(1, dniCliente);
+        		        pstmtAcceso.executeUpdate();
+        		        pstmtAcceso.close();
+        		        
         		        // Abrimos la ventana del usuario pasándole su nombre
-        		        PanelUsuario panelUser = new PanelUsuario(nombreCliente, PanelLogin.this);
+        		        PanelUsuario panelUser = new PanelUsuario(dniCliente, nombreCliente, PanelLogin.this);
         		        panelUser.setVisible(true);
         		        
         		        //Cerramos la ventana de login

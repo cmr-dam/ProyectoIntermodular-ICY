@@ -580,8 +580,10 @@ public class PanelAdministrador extends JFrame {
         try {
             Connection con = Main.getConectar();
             
-            //Hacemos la consulta a la tabla Cliente
-            String sql = "SELECT dni, nombre, apellido, id_membresia, imc, ultimo_acceso FROM Cliente";
+            String sql = "SELECT c.dni, c.nombre, c.apellido, c.id_membresia, cal.IMC, c.ultimo_acceso " +
+                         "FROM Cliente c " +
+                         "LEFT JOIN Calculadora cal ON c.id_calculadora = cal.id";
+                         
             PreparedStatement pstmt = con.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
             
@@ -592,7 +594,7 @@ public class PanelAdministrador extends JFrame {
                 String apellido = rs.getString("apellido");
                 int idMembresia = rs.getInt("id_membresia");
                 
-                String imcStr = rs.getString("imc");
+                String imcStr = rs.getString("IMC");
                 
                 if(imcStr == null || imcStr.isEmpty()) {  //Si el imc aun no ha sido calculado por el cliente ponemos --
                 	imcStr = "--";
