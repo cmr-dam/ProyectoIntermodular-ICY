@@ -117,6 +117,12 @@ public class PanelLogin extends JFrame {
         		        pstmtAcceso.executeUpdate();
         		        pstmtAcceso.close();
         		        
+        		        String sqlRegEntrada = "INSERT INTO Registrar_Entrada (codigo_registro_acceso, dni_cliente, fecha, hora) VALUES ((SELECT codigo FROM Registro_Acceso LIMIT 1), ?, CURRENT_DATE, CURRENT_TIME) ON CONFLICT (codigo_registro_acceso, dni_cliente) DO UPDATE SET fecha = CURRENT_DATE, hora = CURRENT_TIME";
+        		        PreparedStatement pstmtReg = con.prepareStatement(sqlRegEntrada);
+        		        pstmtReg.setString(1, dniCliente);
+        		        pstmtReg.executeUpdate();
+        		        pstmtReg.close();
+        		        
         		        // Abrimos la ventana del usuario pasándole su nombre
         		        PanelUsuario panelUser = new PanelUsuario(dniCliente, nombreCliente, PanelLogin.this);
         		        panelUser.setVisible(true);

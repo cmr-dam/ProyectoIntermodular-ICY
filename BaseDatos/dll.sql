@@ -1,28 +1,27 @@
-DROP TABLE IF EXISTS Mensajes_Contacto;
-DROP TABLE IF EXISTS Entrenar;
-DROP TABLE IF EXISTS Limpiar;
-DROP TABLE IF EXISTS Ensenyar;
-DROP TABLE IF EXISTS Realizar;
-DROP TABLE IF EXISTS Atender;
-DROP TABLE IF EXISTS Asistir;
-DROP TABLE IF EXISTS Acceder;
-DROP TABLE IF EXISTS Usar;
-DROP TABLE IF EXISTS Registrar_Salida;
-DROP TABLE IF EXISTS Registrar_Entrada;
-DROP TABLE IF EXISTS Cliente;
-DROP TABLE IF EXISTS Limpiador;
-DROP TABLE IF EXISTS Recepcionista;
-DROP TABLE IF EXISTS Entrenador;
-DROP TABLE IF EXISTS Administrador;
-DROP TABLE IF EXISTS Empleados;
-DROP TABLE IF EXISTS Zona_Entrenos;
-DROP TABLE IF EXISTS Clases;
-DROP TABLE IF EXISTS Spa;
-DROP TABLE IF EXISTS Vestuario;
-DROP TABLE IF EXISTS Registro_Acceso;
-DROP TABLE IF EXISTS Calculadora;
-DROP TABLE IF EXISTS Membresia;
-
+DROP TABLE IF EXISTS Mensajes_Contacto CASCADE;
+DROP TABLE IF EXISTS Entrenar CASCADE;
+DROP TABLE IF EXISTS Limpiar CASCADE;
+DROP TABLE IF EXISTS Ensenyar CASCADE;
+DROP TABLE IF EXISTS Realizar CASCADE;
+DROP TABLE IF EXISTS Atender CASCADE;
+DROP TABLE IF EXISTS Asistir CASCADE;
+DROP TABLE IF EXISTS Acceder CASCADE;
+DROP TABLE IF EXISTS Usar CASCADE;
+DROP TABLE IF EXISTS Registrar_Salida CASCADE;
+DROP TABLE IF EXISTS Registrar_Entrada CASCADE;
+DROP TABLE IF EXISTS Cliente CASCADE;
+DROP TABLE IF EXISTS Limpiador CASCADE;
+DROP TABLE IF EXISTS Recepcionista CASCADE;
+DROP TABLE IF EXISTS Entrenador CASCADE;
+DROP TABLE IF EXISTS Administrador CASCADE;
+DROP TABLE IF EXISTS Empleados CASCADE;
+DROP TABLE IF EXISTS Zona_Entrenos CASCADE;
+DROP TABLE IF EXISTS Clases CASCADE;
+DROP TABLE IF EXISTS Spa CASCADE;
+DROP TABLE IF EXISTS Vestuario CASCADE;
+DROP TABLE IF EXISTS Registro_Acceso CASCADE;
+DROP TABLE IF EXISTS Calculadora CASCADE;
+DROP TABLE IF EXISTS Membresia CASCADE;
 
 -- MEMBRESIA
 CREATE TABLE Membresia (
@@ -85,19 +84,19 @@ CREATE TABLE Administrador (
 CREATE TABLE Entrenador (
     tipo_empleados VARCHAR(20) PRIMARY KEY,
     tipo VARCHAR(50),
-    FOREIGN KEY (tipo_empleados) REFERENCES Empleados(dni)
+    FOREIGN KEY (tipo_empleados) REFERENCES Empleados(dni) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Recepcionista (
     tipo_empleados VARCHAR(20) PRIMARY KEY,
     turno VARCHAR(20),
-    FOREIGN KEY (tipo_empleados) REFERENCES Empleados(dni)
+    FOREIGN KEY (tipo_empleados) REFERENCES Empleados(dni) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Limpiador (
     tipo_empleados VARCHAR(20) PRIMARY KEY,
     turno VARCHAR(20),
-    FOREIGN KEY (tipo_empleados) REFERENCES Empleados(dni)
+    FOREIGN KEY (tipo_empleados) REFERENCES Empleados(dni) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- DATOS CLIENTES
@@ -111,8 +110,8 @@ CREATE TABLE Cliente (
     id_calculadora INT,
     ultimo_acceso TIMESTAMP,
     fecha_compra DATE DEFAULT CURRENT_DATE,
-    FOREIGN KEY (id_membresia) REFERENCES Membresia(id),
-    FOREIGN KEY (id_calculadora) REFERENCES Calculadora(id)
+    FOREIGN KEY (id_membresia) REFERENCES Membresia(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY (id_calculadora) REFERENCES Calculadora(id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- REGISTRAR LA ENTRADA/SALIDA
@@ -122,8 +121,8 @@ CREATE TABLE Registrar_Entrada (
     fecha DATE,
     hora TIME,
     PRIMARY KEY (codigo_registro_acceso, dni_cliente),
-    FOREIGN KEY (codigo_registro_acceso) REFERENCES Registro_Acceso(codigo),
-    FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni)
+    FOREIGN KEY (codigo_registro_acceso) REFERENCES Registro_Acceso(codigo) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Registrar_Salida (
@@ -132,8 +131,8 @@ CREATE TABLE Registrar_Salida (
     fecha DATE,
     hora TIME,
     PRIMARY KEY (codigo_registro_acceso, dni_cliente),
-    FOREIGN KEY (codigo_registro_acceso) REFERENCES Registro_Acceso(codigo),
-    FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni)
+    FOREIGN KEY (codigo_registro_acceso) REFERENCES Registro_Acceso(codigo) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- USAR VESTUARIO 
@@ -141,8 +140,8 @@ CREATE TABLE Usar (
     id_vestuario INT,
     dni_cliente VARCHAR(20),
     PRIMARY KEY (id_vestuario, dni_cliente),
-    FOREIGN KEY (id_vestuario) REFERENCES Vestuario(id),
-    FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni)
+    FOREIGN KEY (id_vestuario) REFERENCES Vestuario(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- ACCEDER AL SPA
@@ -150,8 +149,8 @@ CREATE TABLE Acceder (
     nombre_spa VARCHAR(50),
     dni_cliente VARCHAR(20),
     PRIMARY KEY (nombre_spa, dni_cliente),
-    FOREIGN KEY (nombre_spa) REFERENCES Spa(nombre),
-    FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni)
+    FOREIGN KEY (nombre_spa) REFERENCES Spa(nombre) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- ASISTIR A CLASES
@@ -159,8 +158,8 @@ CREATE TABLE Asistir (
     codigo_clases INT,
     dni_cliente VARCHAR(20),
     PRIMARY KEY (codigo_clases, dni_cliente),
-    FOREIGN KEY (codigo_clases) REFERENCES Clases(codigo),
-    FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni)
+    FOREIGN KEY (codigo_clases) REFERENCES Clases(codigo) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- EMPLEADO ATIENDE A CLIENTE
@@ -170,8 +169,8 @@ CREATE TABLE Atender (
     fecha DATE,
     descripcion VARCHAR(255),
     PRIMARY KEY (dni_empleados, dni_cliente),
-    FOREIGN KEY (dni_empleados) REFERENCES Empleados(dni),
-    FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni)
+    FOREIGN KEY (dni_empleados) REFERENCES Empleados(dni) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Relación ternaria Realizar -> Entrenadores, Zona Entrenos y Clases
@@ -179,10 +178,12 @@ CREATE TABLE Realizar (
     dni_entrenador VARCHAR(20),
     codigo_clases INT,
     id_zona_entrenos INT NOT NULL,
+    hora TIME,
+    descripcion VARCHAR(255),
     PRIMARY KEY (dni_entrenador, codigo_clases),
-    FOREIGN KEY (dni_entrenador) REFERENCES Entrenador(tipo_empleados),
-    FOREIGN KEY (codigo_clases) REFERENCES Clases(codigo),
-    FOREIGN KEY (id_zona_entrenos) REFERENCES Zona_Entrenos(id)
+    FOREIGN KEY (dni_entrenador) REFERENCES Entrenador(tipo_empleados) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (codigo_clases) REFERENCES Clases(codigo) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_zona_entrenos) REFERENCES Zona_Entrenos(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- UN ENTRENADOR PUEDE ENSEÑAR A OTRO ENTRENADOR
@@ -190,8 +191,8 @@ CREATE TABLE Ensenyar (
     entrenador1 VARCHAR(20),
     entrenador2 VARCHAR(20),
     PRIMARY KEY (entrenador1, entrenador2),
-    FOREIGN KEY (entrenador1) REFERENCES Entrenador(tipo_empleados),
-    FOREIGN KEY (entrenador2) REFERENCES Entrenador(tipo_empleados)
+    FOREIGN KEY (entrenador1) REFERENCES Entrenador(tipo_empleados) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (entrenador2) REFERENCES Entrenador(tipo_empleados) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- LIMPIADORES LIMPIAN ZONAS
@@ -200,8 +201,8 @@ CREATE TABLE Limpiar (
     id_zona_de_entrenos INT,
     fecha DATE,
     PRIMARY KEY (turno_limpiador, id_zona_de_entrenos),
-    FOREIGN KEY (turno_limpiador) REFERENCES Limpiador(tipo_empleados),
-    FOREIGN KEY (id_zona_de_entrenos) REFERENCES Zona_Entrenos(id)
+    FOREIGN KEY (turno_limpiador) REFERENCES Limpiador(tipo_empleados) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_zona_de_entrenos) REFERENCES Zona_Entrenos(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- ENTRENAR Clientes -> zonas de entreno
@@ -209,8 +210,8 @@ CREATE TABLE Entrenar (
     dni_cliente VARCHAR(20),
     id_zona_entrenos INT,
     PRIMARY KEY (dni_cliente, id_zona_entrenos),
-    FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni),
-    FOREIGN KEY (id_zona_entrenos) REFERENCES Zona_Entrenos(id)
+    FOREIGN KEY (dni_cliente) REFERENCES Cliente(dni) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_zona_entrenos) REFERENCES Zona_Entrenos(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Contacto que llega de la página web
