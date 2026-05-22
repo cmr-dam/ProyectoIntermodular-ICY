@@ -123,6 +123,14 @@ public class PanelLogin extends JFrame {
         		        pstmtReg.executeUpdate();
         		        pstmtReg.close();
         		        
+        		        //Borramos la salida anterior para que vuelva a aparecer "Dentro" en el panel de acceso
+        		        String sqlBorrarSalida = "DELETE FROM Registrar_Salida WHERE dni_cliente = ?";
+
+        		        PreparedStatement pstmtBorrar = con.prepareStatement(sqlBorrarSalida);
+        		        pstmtBorrar.setString(1, dniCliente);
+        		        pstmtBorrar.executeUpdate();
+        		        pstmtBorrar.close();
+        		        
         		        // Abrimos la ventana del usuario pasándole su nombre
         		        PanelUsuario panelUser = new PanelUsuario(dniCliente, nombreCliente, PanelLogin.this);
         		        panelUser.setVisible(true);

@@ -1134,12 +1134,12 @@ public class PanelAdministrador extends JFrame {
             
             String sql = "SELECT e.dni_cliente, c.nombre, c.apellido, " +
                          "TO_CHAR(e.fecha, 'DD/MM/YYYY') AS fecha_formateada, " +
-                         "e.hora AS hora_entrada, " +
-                         "(SELECT s.hora FROM Registrar_Salida s WHERE e.codigo_registro_acceso = s.codigo_registro_acceso AND e.dni_cliente = s.dni_cliente AND e.fecha = s.fecha) AS hora_salida " +
+                         "TO_CHAR(e.hora, 'HH24:MI') AS hora_entrada_f, " +
+                         "(SELECT TO_CHAR(s.hora, 'HH24:MI') FROM Registrar_Salida s WHERE e.codigo_registro_acceso = s.codigo_registro_acceso AND e.dni_cliente = s.dni_cliente AND e.fecha = s.fecha) AS hora_salida_f " +
                          "FROM Registrar_Entrada e, Cliente c " +
                          "WHERE e.dni_cliente = c.dni " +
                          "ORDER BY e.fecha DESC, e.hora DESC";
-                             
+                         
             PreparedStatement pstmt = con.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
             
@@ -1147,18 +1147,19 @@ public class PanelAdministrador extends JFrame {
                 String dni = rs.getString("dni_cliente");
                 String nombre = rs.getString("nombre");
                 String apellido = rs.getString("apellido");
-                String fechaFormateada = rs.getString("fecha_formateada");
-                String horaEntrada = rs.getString("hora_entrada");
-                String horaSalida = rs.getString("hora_salida");
+                String fecha = rs.getString("fecha_formateada");
+                String horaEntrada = rs.getString("hora_entrada_f");
+                String horaSalida = rs.getString("hora_salida_f");
                 
-                if(horaSalida == null) horaSalida = "Dentro";
+                //Si horaSalida es nula, mostramos "Dentro" en la tabla para el admin
+                String textoSalida = (horaSalida == null || horaSalida.isEmpty()) ? "Dentro" : horaSalida;
                 
-                modeloTablaAcceso.addRow(new Object[]{ dni, nombre, apellido, fechaFormateada, horaEntrada, horaSalida });
+                modeloTablaAcceso.addRow(new Object[]{ dni, nombre, apellido, fecha, horaEntrada, textoSalida });
             }
             rs.close();
             pstmt.close();
         } catch(SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar el registro de accesos.");
+            JOptionPane.showMessageDialog(this, "Error al cargar los accesos.");
             e.printStackTrace();
         }
     }
@@ -1167,12 +1168,15 @@ public class PanelAdministrador extends JFrame {
         modeloTablaActividades.setRowCount(0);
         try {
             Connection con = Main.getConectar();
-            String sql = "SELECT r.dni_entrenador, r.codigo_clases, e.nombre, c.tipo AS clase, z.tipo AS zona, r.hora, r.descripcion " +
+            
+            String sql = "SELECT r.dni_entrenador, r.codigo_clases, e.nombre, c.tipo AS clase, z.tipo AS zona, " +
+                         "TO_CHAR(r.hora, 'HH24:MI') AS hora_formateada, r.descripcion " +
                          "FROM Realizar r, Entrenador en, Empleados e, Clases c, Zona_Entrenos z " +
                          "WHERE r.dni_entrenador = en.tipo_empleados " +
                          "AND en.tipo_empleados = e.dni " +
                          "AND r.codigo_clases = c.codigo " +
-                         "AND r.id_zona_entrenos = z.id";
+                         "AND r.id_zona_entrenos = z.id " +
+                         "ORDER BY r.hora ASC";
                          
             PreparedStatement pstmt = con.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
@@ -1183,11 +1187,11 @@ public class PanelAdministrador extends JFrame {
                 String nombre = rs.getString("nombre");
                 String clase = rs.getString("clase");
                 String zona = rs.getString("zona");
-                String hora = rs.getString("hora");
+                String hora = rs.getString("hora_formateada");
                 String desc = rs.getString("descripcion");
                 
-                if(hora == null) hora = "--:--";
-                if(desc == null) desc = "Sin descripción";
+                if(hora == null || hora.isEmpty()) hora = "--:--";
+                if(desc == null || desc.isEmpty()) desc = "Sin descripción";
                 
                 Object[] fila = { dni, cod, nombre, clase, zona, hora, desc };
                 modeloTablaActividades.addRow(fila);
