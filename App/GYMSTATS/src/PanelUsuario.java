@@ -1,9 +1,8 @@
 import javax.swing.*;
+import java.sql.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 
 public class PanelUsuario extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -12,8 +11,11 @@ public class PanelUsuario extends JFrame {
 	private JTextField txtPeso, txtAltura;
 	private JLabel lblValorIMC, lblEstadoIMC, lblDiasRestantes;
 	private JProgressBar progressMembresia;
+	private String dniGlobal;
 
-	public PanelUsuario(String nombreUsuario, PanelLogin p) {
+	public PanelUsuario(String dniUsuario, String nombreUsuario, PanelLogin p) {
+		this.dniGlobal = dniUsuario;
+		
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -140,7 +142,7 @@ public class PanelUsuario extends JFrame {
 		btnCalcular.setFont(new Font("Segoe UI Bold", Font.PLAIN, 12));
 		btnCalcular.setBorder(null);
 		btnCalcular.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		btnCalcular.addActionListener(e -> calcularIMC());
+		btnCalcular.addActionListener(e -> calcularIMC(dniGlobal));
 		cardCalc.add(btnCalcular);
 
 		// Pie de página
@@ -151,7 +153,7 @@ public class PanelUsuario extends JFrame {
 		contentPane.add(lblFoot);
 	}
 
-	private void calcularIMC() {
+	private void calcularIMC(String dniUsuario) {
 		try {
 			double peso = Double.parseDouble(txtPeso.getText());
 			double altura = Double.parseDouble(txtAltura.getText());
@@ -178,18 +180,39 @@ public class PanelUsuario extends JFrame {
 				lblEstadoIMC.setForeground(Color.ORANGE); 
 			}
 			
-			String sqlUpdate = "UPDATE Cliente SET imc = ? WHERE dni = ?";
-			
 			Connection con = Main.getConectar();
-			PreparedStatement pstmt = con.prepareStatement(sqlUpdate);
 			
-			pstmt.setDouble(1, imc);
-			pstmt.setString(2, "24509999Z"); 
-			
-			pstmt.executeUpdate();
-			
-			
-			pstmt.close();
+			String sqlSelect = "SELECT id_calculadora FROM Cliente WHERE dni = ?";
+			PreparedStatement pstmtSelect = con.prepareStatement(sqlSelect);
+			pstmtSelect.setString(1, dniUsuario);
+			ResultSet rs = pstmtSelect.executeQuery();
+
+			if (rs.next()) {
+			    int idCalc = rs.getInt("id_calculadora");
+
+			    if (rs.wasNull() || idCalc == 0) {
+			        Statement stmtMax = con.createStatement();
+			        ResultSet rsMax = stmtMax.executeQuery("SELECT COALESCE(MAX(id), 0) + 1 AS nuevo_id FROM Calculadora");
+			        rsMax.next();
+			        int nuevoId = rsMax.getInt("nuevo_id");
+
+			        PreparedStatement pstmtInsert = con.prepareStatement("INSERT INTO Calculadora (id, IMC) VALUES (?, ?)");
+			        pstmtInsert.setInt(1, nuevoId);
+			        pstmtInsert.setDouble(2, imc);
+			        pstmtInsert.executeUpdate();
+
+			        PreparedStatement pstmtUpdateCli = con.prepareStatement("UPDATE Cliente SET id_calculadora = ? WHERE dni = ?");
+			        pstmtUpdateCli.setInt(1, nuevoId);
+			        pstmtUpdateCli.setString(2, dniUsuario);
+			        pstmtUpdateCli.executeUpdate();
+			        
+			    } else {
+			        PreparedStatement pstmtUpdateCalc = con.prepareStatement("UPDATE Calculadora SET IMC = ? WHERE id = ?");
+			        pstmtUpdateCalc.setDouble(1, imc);
+			        pstmtUpdateCalc.setInt(2, idCalc);
+			        pstmtUpdateCalc.executeUpdate();
+			    }
+			}
 
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(this, "Error al calcular o guardar los datos");

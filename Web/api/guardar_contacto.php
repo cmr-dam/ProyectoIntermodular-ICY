@@ -11,7 +11,7 @@ if(!empty($datos->email) && !empty($datos->telefono) && !empty($datos->mensaje))
         $email = htmlspecialchars(strip_tags($datos->email));
         $telefono = htmlspecialchars(strip_tags($datos->telefono));
         $mensaje = htmlspecialchars(strip_tags($datos->mensaje));
-        $es_empresa = $datos->esEmpresa ? 'true' : 'false'; // En Postgres los booleanos van así
+        $es_empresa = $datos->esEmpresa ? 'true' : 'false';
         
         $stmt->bindParam(":email", $email);
         $stmt->bindParam(":telefono", $telefono);
@@ -25,7 +25,7 @@ if(!empty($datos->email) && !empty($datos->telefono) && !empty($datos->mensaje))
             http_response_code(503);
             echo json_encode(["mensaje" => "No se pudo guardar."]);
         }
-    } catch(PDOException $e) {
+    } catch(Exception $e) {
         http_response_code(500);
         echo json_encode(["mensaje" => "Error: " . $e->getMessage()]);
     }

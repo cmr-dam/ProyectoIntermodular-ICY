@@ -68,7 +68,6 @@ INSERT INTO Limpiador (tipo_empleados, turno) VALUES
 ('33333333C', 'Tarde'),
 ('11111111A', 'Mañana');
 
--- AQUÍ ESTÁ LA MAGIA: Inserts que funcionan perfectamente con la app de Java
 INSERT INTO Cliente (dni, nombre, apellido, usuario, contraseña, id_membresia, id_calculadora, ultimo_acceso, fecha_compra) VALUES 
 ('99999999Z', 'Juan',  'Pérez',  'juanp', '1234', 2, 1, '2023-10-25 09:00:00', '2023-01-15'),
 ('88888888Y', 'Maria', 'López',  'marial', '1234', 1, 2, '2023-10-25 10:30:00', '2023-03-10'),
@@ -125,12 +124,12 @@ INSERT INTO Limpiar (turno_limpiador, id_zona_de_entrenos, fecha) VALUES
 ('33333333C', 2, '2023-10-25'),
 ('33333333C', 3, '2023-10-26');
 
-INSERT INTO Realizar (dni_entrenador, codigo_clases, id_zona_entrenos) VALUES 
-('11111111A', 502, 2),
-('44444444D', 501, 3),
-('55555555E', 503, 1),
-('22222222B', 504, 4),
-('33333333C', 505, 5);
+INSERT INTO Realizar (dni_entrenador, codigo_clases, id_zona_entrenos, hora, descripcion) VALUES 
+('11111111A', 502, 2, '10:00:00', 'Clase intensa de levantamiento'),
+('44444444D', 501, 3, '18:00:00', 'Yoga para principiantes'),
+('55555555E', 503, 1, '19:30:00', 'Pilates avanzado'),
+('22222222B', 504, 4, '09:00:00', 'Sesión de Zumba cardio'),
+('33333333C', 505, 5, '20:00:00', 'Entrenamiento de Boxeo y técnica');
 
 INSERT INTO Entrenar (dni_cliente, id_zona_entrenos) VALUES 
 ('99999999Z', 2),

@@ -98,7 +98,7 @@ public class PanelLogin extends JFrame {
         		    Connection con = Main.getConectar();
         		    
         		    //Ejecutamos la consulta con PreparedStatement
-        		    String sql = "SELECT nombre FROM Cliente WHERE usuario = ? AND contraseña = ?"; //Usamos el ? para que se rellene el parametro
+        		    String sql = "SELECT dni, nombre FROM Cliente WHERE usuario = ? AND contraseña = ?"; //Usamos el ? para que se rellene el parametro
         		    PreparedStatement pstmt = con.prepareStatement(sql);
         		    pstmt.setString(1, user);
         		    pstmt.setString(2, passwd);
@@ -108,10 +108,31 @@ public class PanelLogin extends JFrame {
         		    //Si rs.next() es true, ese usuario existira en la base
         		    //Primero buscamos clientes
         		    if(rs.next()) {
+        		        String dniCliente = rs.getString("dni");
         		        String nombreCliente = rs.getString("nombre"); //Recogemos el nombre
         		        
+        		        String sqlAcceso = "UPDATE Cliente SET ultimo_acceso = CURRENT_TIMESTAMP WHERE dni = ?";
+        		        PreparedStatement pstmtAcceso = con.prepareStatement(sqlAcceso);
+        		        pstmtAcceso.setString(1, dniCliente);
+        		        pstmtAcceso.executeUpdate();
+        		        pstmtAcceso.close();
+        		        
+        		        String sqlRegEntrada = "INSERT INTO Registrar_Entrada (codigo_registro_acceso, dni_cliente, fecha, hora) VALUES ((SELECT codigo FROM Registro_Acceso LIMIT 1), ?, CURRENT_DATE, CURRENT_TIME) ON CONFLICT (codigo_registro_acceso, dni_cliente) DO UPDATE SET fecha = CURRENT_DATE, hora = CURRENT_TIME";
+        		        PreparedStatement pstmtReg = con.prepareStatement(sqlRegEntrada);
+        		        pstmtReg.setString(1, dniCliente);
+        		        pstmtReg.executeUpdate();
+        		        pstmtReg.close();
+        		        
+        		        //Borramos la salida anterior para que vuelva a aparecer "Dentro" en el panel de acceso
+        		        String sqlBorrarSalida = "DELETE FROM Registrar_Salida WHERE dni_cliente = ?";
+
+        		        PreparedStatement pstmtBorrar = con.prepareStatement(sqlBorrarSalida);
+        		        pstmtBorrar.setString(1, dniCliente);
+        		        pstmtBorrar.executeUpdate();
+        		        pstmtBorrar.close();
+        		        
         		        // Abrimos la ventana del usuario pasándole su nombre
-        		        PanelUsuario panelUser = new PanelUsuario(nombreCliente, PanelLogin.this);
+        		        PanelUsuario panelUser = new PanelUsuario(dniCliente, nombreCliente, PanelLogin.this);
         		        panelUser.setVisible(true);
         		        
         		        //Cerramos la ventana de login
@@ -136,7 +157,7 @@ public class PanelLogin extends JFrame {
         		            dispose();
         		        } else {
         		            //Si no hay coincidencia, las credenciales son incorrectas
-        		            lblMensaje.setText("Usuario o contraseña incorrectos.");
+        		            lblMensaje.setText("Usuario/contraseña incorrectos.");
         		            txtPassword.setText(""); //Limpiamos la contraseña
         		        }
         		        

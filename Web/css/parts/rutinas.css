@@ -1,0 +1,27 @@
+#grid-rutinas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px; 
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto; 
+}
+
+
+body.dark-mode #grid-rutinas .historia {
+    background: #2b2b2b;
+    color: #e0e0e0;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 900px) {
+    #grid-rutinas {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    #grid-rutinas {
+        grid-template-columns: 1fr;
+    }
+}

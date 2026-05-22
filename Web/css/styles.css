@@ -6,36 +6,6 @@
 @import url('./parts/sobre-nosotros.css');
 @import url('./parts/formulario.css');
 @import url('./parts/footer.css');
-
-/* ================= MODO OSCURO ================= */
-body.dark-mode {
-    background-color: #1e1e1e;
-    color: #e0e0e0;
-}
-body.dark-mode header {
-    background: #2b2b2b;
-    box-shadow: 0 2px 10px rgba(255,255,255,0.05);
-}
-body.dark-mode #inicio {
-    background: #111;
-}
-body.dark-mode #seccionFormulario, body.dark-mode #tarifas, body.dark-mode #sobre-nosotros {
-    background: #1e1e1e;
-}
-body.dark-mode .historia, body.dark-mode #tarifas > div {
-    background: #2b2b2b;
-    color: #e0e0e0;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-}
-body.dark-mode h2, body.dark-mode .historia h3, body.dark-mode #tarifas h3 {
-    color: #00c3ff; 
-}
-body.dark-mode p { color: #ccc; }
-body.dark-mode input, body.dark-mode textarea {
-    background: #333;
-    color: white;
-    border-color: #555;
-}
-body.dark-mode footer {
-    background: #111;
-}
+@import url('./parts/rutinas.css');
+@import url('./parts/darkmode.css');
+@import url('./parts/responsive.css');
