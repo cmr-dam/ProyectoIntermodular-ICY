@@ -16,9 +16,9 @@ FROM Membresia;
 SELECT tipo
 FROM Zona_Entrenos;
 
--- Nombres de los spa
-SELECT nombre
-FROM Spa;
+-- Correos del formulario de contacto web
+SELECT email
+FROM Mensajes_Contacto;
 
 
 -- b. 2 Actualizaciones y 2 Borrados en cualquier tabla
@@ -38,10 +38,10 @@ DELETE
 FROM Registro_Acceso 
 WHERE codigo = 105;
 
--- Borrar una zona de spa
+-- Borrar un mensaje de contacto de la web
 DELETE 
-FROM Spa 
-WHERE nombre = 'Piscina Fría';
+FROM Mensajes_Contacto 
+WHERE id = 1;
 
 
 -- c. 3 Consultas con más de 1 tabla
@@ -172,11 +172,10 @@ WHERE R.dni_entrenador = E.dni
 AND R.codigo_clases = Cl.codigo
 AND R.id_zona_entrenos = Z.id;
 
--- Clientes y vestuario que usan
-SELECT C.nombre, V.genero 
-FROM Cliente C, Usar U, Vestuario V 
-WHERE C.dni = U.dni_cliente 
-AND U.id_vestuario = V.id;
+-- Clientes y la fecha de sus registros de entrada
+SELECT C.nombre, R.fecha 
+FROM Cliente C, Registrar_Entrada R 
+WHERE C.dni = R.dni_cliente;
 
 -- Entrenadores que imparten más clases que la media general
 SELECT E.nombre, E.apellido, COUNT(R.codigo_clases) AS Total_Clases

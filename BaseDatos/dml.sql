@@ -19,18 +19,6 @@ INSERT INTO Registro_Acceso (codigo) VALUES
 (104),
 (105);
 
-INSERT INTO Vestuario (id, genero) VALUES 
-(1, 'Masculino'),
-(2, 'Femenino'),
-(3, 'Mixto');
-
-INSERT INTO Spa (nombre) VALUES 
-('Sauna Húmeda'),
-('Jacuzzi Central'),
-('Zona Relax'),
-('Circuito Termal'),
-('Spa Deportivo');
-
 INSERT INTO Clases (codigo, tipo) VALUES 
 (501, 'Yoga'),
 (502, 'Crossfit'),
@@ -89,20 +77,6 @@ INSERT INTO Registrar_Salida (codigo_registro_acceso, dni_cliente, fecha, hora) 
 (102, '66666666W', '2023-10-26', '12:30:00'),
 (103, '55555555V', '2023-10-27', '11:00:00');
 
-INSERT INTO Usar (id_vestuario, dni_cliente) VALUES 
-(1, '99999999Z'),
-(2, '88888888Y'),
-(1, '77777777X'),
-(2, '55555555V'),
-(3, '66666666W');
-
-INSERT INTO Acceder (nombre_spa, dni_cliente) VALUES 
-('Jacuzzi Central', '77777777X'),
-('Sauna Húmeda', '99999999Z'),
-('Zona Relax', '55555555V'),
-('Circuito Termal', '88888888Y'),
-('Spa Deportivo', '66666666W');
-
 INSERT INTO Asistir (codigo_clases, dni_cliente) VALUES 
 (501, '88888888Y'),
 (502, '99999999Z'),
@@ -141,3 +115,9 @@ INSERT INTO Entrenar (dni_cliente, id_zona_entrenos) VALUES
 INSERT INTO Administrador (id, usuario, contraseña, nombre) VALUES 
 (1, 'carlos', '1234', 'Carlos'),
 (2, 'admin', 'admin', 'Administrador Principal');
+
+INSERT INTO Mensajes_Contacto (email, telefono, mensaje, es_empresa) VALUES 
+('juan.interesado@email.com', '611222333', 'Hola, ¿tenéis entrenadores personales disponibles por la tarde?', FALSE),
+('marta.gomez@email.com', '622333444', 'Me gustaría probar un día las instalaciones, ¿es posible?', FALSE),
+('info@suplementosgym.es', '600123456', 'Buenas, somos una marca de suplementos y nos gustaría patrocinaros.', TRUE),
+('lucas.fitness@email.com', '633444555', 'Quiero apuntarme al gimnasio el mes que viene, ¿hay matrícula?', FALSE);
