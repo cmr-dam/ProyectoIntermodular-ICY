@@ -2,13 +2,14 @@
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
-$host = "localhost";
+$host = "192.168.1.200;
+$push = "5432";
 $db_name = "Gymstats"; 
 $username = "postgres";        
 $password = "1234"; 
 
 try {
-    $conexion = new PDO("pgsql:host=$host;dbname=$db_name", $username, $password);
+    $conexion = new PDO("pgsql:host=$host;port=$port;dbname=$db_name", $username, $password);
     $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conexion->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 } catch (PDOException $exception) {
