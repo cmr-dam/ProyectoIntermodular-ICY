@@ -27,6 +27,9 @@ public class PanelAdministrador extends JFrame {
     private JTable tablaContacto;
     private DefaultTableModel modeloTablaContacto;
     
+    private JTable tablaAcceso;
+    private DefaultTableModel modeloTablaAcceso;
+    
     private JPanel contentArea;
 
     //Creamos las variables de los colores para usar los mismos
@@ -94,10 +97,7 @@ public class PanelAdministrador extends JFrame {
         btn.setBorderPainted(false);
         
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-//        btn.setBorder(BorderFactory.createCompoundBorder(
-//                new LineBorder(azulGym, 1, true),
-//                new EmptyBorder(8, 12, 8, 12)
-//        ));
+
         return btn;
     }
     
@@ -293,7 +293,6 @@ public class PanelAdministrador extends JFrame {
         JScrollPane scroll = new JScrollPane(tablaPersonal);
         scroll.getViewport().setBackground(grisInput);
         scroll.setBackground(grisInput);
-//        scroll.setBorder(new LineBorder(azulGym, 1));
 
         contenido.add(scroll, BorderLayout.CENTER);
 
@@ -318,15 +317,81 @@ public class PanelAdministrador extends JFrame {
 
     //Panel de acceso
     private JPanel crearPanelAcceso() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(fondoOscuro);
-        
-        JLabel titulo = new JLabel("Control de Accesos (En desarrollo...)", SwingConstants.CENTER);
+        JPanel contenido = new JPanel(new BorderLayout(15, 15));
+        contenido.setBorder(new EmptyBorder(20, 20, 20, 20));
+        contenido.setBackground(fondoOscuro);
+
+        JLabel titulo = new JLabel("Control de Accesos");
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 30));
-        titulo.setForeground(azulGym);
+        titulo.setForeground(Color.WHITE);
+
+        JPanel cabecera = new JPanel(new BorderLayout());
+        cabecera.setBackground(fondoOscuro);
+        cabecera.add(titulo, BorderLayout.WEST);
+
+        JPanel botones = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        botones.setBackground(fondoOscuro);
         
-        panel.add(titulo, BorderLayout.CENTER);
-        return panel;
+        JButton btnActualizar = new JButton("Actualizar");
+        btnActualizar.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        btnActualizar.setFocusPainted(false);
+        btnActualizar.setPreferredSize(new Dimension(140, 38));
+        btnActualizar.setBackground(azulGym);
+        btnActualizar.setForeground(Color.BLACK);
+        btnActualizar.setOpaque(true);
+        btnActualizar.setBorderPainted(true);
+        btnActualizar.setBorder(new LineBorder(azulGym, 1, true));
+        btnActualizar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cargarDatosAcceso();
+            }
+        });
+
+        botones.add(btnActualizar);
+
+        JPanel zonaSuperior = new JPanel();
+        zonaSuperior.setLayout(new BoxLayout(zonaSuperior, BoxLayout.Y_AXIS));
+        zonaSuperior.setBackground(fondoOscuro);
+        zonaSuperior.add(cabecera);
+        zonaSuperior.add(Box.createVerticalStrut(15));
+        zonaSuperior.add(botones);
+
+        contenido.add(zonaSuperior, BorderLayout.NORTH);
+
+        String[] columnas = {"DNI", "Nombre", "Apellido", "Fecha", "Hora Entrada", "Hora Salida"};
+        
+        modeloTablaAcceso = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; 
+            }
+        };
+        tablaAcceso = new JTable(modeloTablaAcceso);
+
+        tablaAcceso.setRowHeight(30);
+        tablaAcceso.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        tablaAcceso.setBackground(grisInput);
+        tablaAcceso.setForeground(Color.WHITE);
+        tablaAcceso.setGridColor(fondoOscuro);
+        tablaAcceso.setSelectionBackground(azulGym);
+        tablaAcceso.setSelectionForeground(Color.BLACK);
+        tablaAcceso.setBorder(new LineBorder(azulGym, 1));
+
+        JTableHeader header = tablaAcceso.getTableHeader();
+        header.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        header.setBackground(azulGym);
+        header.setForeground(Color.BLACK);
+        header.setReorderingAllowed(false);
+
+        JScrollPane scroll = new JScrollPane(tablaAcceso);
+        scroll.getViewport().setBackground(grisInput);
+        scroll.setBackground(grisInput);
+
+        contenido.add(scroll, BorderLayout.CENTER);
+
+        cargarDatosAcceso();
+
+        return contenido;
     }
     
     
@@ -346,7 +411,7 @@ public class PanelAdministrador extends JFrame {
         JPanel botones = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         botones.setBackground(fondoOscuro);
         
-        // BOTÓN ACTUALIZAR (VERSIÓN CLÁSICA NOOB-FRIENDLY)
+        //BOTÓN ACTUALIZAR
         JButton btnActualizar = new JButton("Actualizar");
         btnActualizar.setFont(new Font("Segoe UI", Font.BOLD, 15));
         btnActualizar.setFocusPainted(false);
@@ -683,7 +748,6 @@ public class PanelAdministrador extends JFrame {
         JScrollPane scroll = new JScrollPane(tablaSocios);
         scroll.getViewport().setBackground(grisInput);
         scroll.setBackground(grisInput);
-//        scroll.setBorder(new LineBorder(azulGym, 1));
 
         contenido.add(scroll, BorderLayout.CENTER);
 
@@ -863,6 +927,43 @@ public class PanelAdministrador extends JFrame {
             pstmt.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al abrir el mensaje.");
+            e.printStackTrace();
+        }
+    }
+    
+    public void cargarDatosAcceso() {
+        modeloTablaAcceso.setRowCount(0);
+        try {
+            Connection con = Main.getConectar();
+            String sql = "SELECT e.dni_cliente, c.nombre, c.apellido, e.fecha, e.hora AS hora_entrada, s.hora AS hora_salida " +
+                         "FROM Registrar_Entrada e " +
+                         "JOIN Cliente c ON e.dni_cliente = c.dni " +
+                         "LEFT JOIN Registrar_Salida s ON e.codigo_registro_acceso = s.codigo_registro_acceso " +
+                         "AND e.dni_cliente = s.dni_cliente AND e.fecha = s.fecha " +
+                         "ORDER BY e.fecha DESC, e.hora DESC";
+                         
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            
+            while(rs.next()) {
+                String dni = rs.getString("dni_cliente");
+                String nombre = rs.getString("nombre");
+                String apellido = rs.getString("apellido");
+                String fecha = rs.getString("fecha");
+                String horaEntrada = rs.getString("hora_entrada");
+                String horaSalida = rs.getString("hora_salida");
+                
+                if(horaSalida == null) {
+                    horaSalida = "Dentro";
+                }
+                
+                Object[] fila = { dni, nombre, apellido, fecha, horaEntrada, horaSalida };
+                modeloTablaAcceso.addRow(fila);
+            }
+            rs.close();
+            pstmt.close();
+        } catch(SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar el registro de accesos.");
             e.printStackTrace();
         }
     }
