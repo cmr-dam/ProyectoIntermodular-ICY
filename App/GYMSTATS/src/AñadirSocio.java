@@ -21,6 +21,7 @@ public class AñadirSocio extends JFrame {
 		});
 		
 		setTitle("GymStats - Añadir Socio");
+		Main.setIconoApp(this);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
 		setBounds(100, 100, 400, 550);
 		setLocationRelativeTo(null);

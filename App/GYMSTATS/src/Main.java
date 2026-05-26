@@ -1,4 +1,7 @@
 import java.sql.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatDarkLaf;
 
@@ -35,5 +38,15 @@ public class Main {
         	error.printStackTrace();
         }
         return con;
+    }
+    
+    
+    public static void setIconoApp(JFrame ventana) {
+        try {
+            ImageIcon icono = new ImageIcon(Main.class.getResource("/img/logo-gymstats-recortado.jpeg"));
+            ventana.setIconImage(icono.getImage());
+        } catch (Exception e) {
+            System.out.println("Icono no encontrado.");
+        }
     }
 }

@@ -31,6 +31,7 @@ public class PanelUsuario extends JFrame {
 			}
 		});
 		setTitle("GymStats - Mi Perfil");
+		Main.setIconoApp(this);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //Usamos esto porque si lo borramos se cierra igual
 		setBounds(100, 100, 500, 500); //Aumentamos tamaño
 		setLocationRelativeTo(null);

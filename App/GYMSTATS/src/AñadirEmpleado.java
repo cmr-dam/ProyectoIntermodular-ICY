@@ -21,6 +21,7 @@ public class AñadirEmpleado extends JFrame {
 		});
 		
 		setTitle("GymStats - Añadir Empleado");
+		Main.setIconoApp(this);
 		setBounds(100, 100, 400, 650);
 		setLocationRelativeTo(null);
 		setResizable(false);

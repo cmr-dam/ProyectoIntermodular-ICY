@@ -57,6 +57,7 @@ public class PanelAdministrador extends JFrame {
             }
         });
         setTitle("GymStats - Panel de Gestión");
+        Main.setIconoApp(this);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //Usamos esto porque si lo borramos se cierra igual
         setSize(1200, 700);
         setLocationRelativeTo(null);

@@ -24,6 +24,7 @@ public class ModificarSocio extends JFrame {
 		});
 		
 		setTitle("GymStats - Modificar Socio");
+		Main.setIconoApp(this);
 		setBounds(100, 100, 400, 550); 
 		setLocationRelativeTo(null); 
 		setResizable(false);

@@ -17,6 +17,7 @@ public class PanelLogin extends JFrame {
 
     public PanelLogin() {
         setTitle("GymStats - Login");
+        Main.setIconoApp(this);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 400, 401);
         setResizable(false);

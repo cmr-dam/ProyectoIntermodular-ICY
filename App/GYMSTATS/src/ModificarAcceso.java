@@ -26,6 +26,7 @@ public class ModificarAcceso extends JFrame {
         });
         
         setTitle("GymStats - Modificar Acceso");
+        Main.setIconoApp(this);
         setBounds(100, 100, 400, 480); 
         setLocationRelativeTo(null); 
         setResizable(false);
