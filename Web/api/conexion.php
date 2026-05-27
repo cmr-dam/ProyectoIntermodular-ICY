@@ -2,8 +2,8 @@
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
-$host = "192.168.1.200;
-$push = "5432";
+$host = "192.168.1.200";
+$port = "5432";
 $db_name = "Gymstats"; 
 $username = "postgres";        
 $password = "1234"; 
