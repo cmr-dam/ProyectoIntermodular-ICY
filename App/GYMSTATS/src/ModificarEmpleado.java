@@ -4,14 +4,16 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 
-public class AñadirEmpleado extends JFrame {
+public class ModificarEmpleado extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtDni, txtNombre, txtApellido, txtTelefono, txtNomina, txtExtra, txtUsuario, txtPassword;
 	private JComboBox<String> comboTipo;
+	private String dniOriginal;
 
-	public AñadirEmpleado(PanelAdministrador p) {
+	public ModificarEmpleado(PanelAdministrador p, String dniOriginal) {
+		this.dniOriginal = dniOriginal;
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -20,7 +22,7 @@ public class AñadirEmpleado extends JFrame {
 			}
 		});
 		
-		setTitle("GymStats - Añadir Empleado");
+		setTitle("GymStats - Modificar Empleado");
 		Main.setIconoApp(this);
 		setBounds(100, 100, 400, 770);
 		setLocationRelativeTo(null);
@@ -35,7 +37,7 @@ public class AñadirEmpleado extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel lblTitulo = new JLabel("NUEVO EMPLEADO");
+		JLabel lblTitulo = new JLabel("MODIFICAR EMPLEADO");
 		lblTitulo.setForeground(azulGym);
 		lblTitulo.setFont(new Font("Segoe UI Black", Font.BOLD, 24));
 		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
@@ -44,7 +46,8 @@ public class AñadirEmpleado extends JFrame {
 
 		txtDni = new JTextField();
 		txtDni.setBounds(40, 80, 300, 45);
-		darEstiloCampo(txtDni, "DNI del Empleado", fondoOscuro);
+		txtDni.setEditable(false); // No se debería poder cambiar el DNI (clave primaria)
+		darEstiloCampo(txtDni, "DNI del Empleado (Fijo)", fondoOscuro);
 		contentPane.add(txtDni);
 
 		txtNombre = new JTextField();
@@ -80,7 +83,8 @@ public class AñadirEmpleado extends JFrame {
 		String[] tipos = {"Entrenador", "Recepcionista", "Limpiador"};
 		comboTipo = new JComboBox<>(tipos);
 		comboTipo.setBounds(40, 500, 300, 45);
-		darEstiloCampo(comboTipo, "Puesto", fondoOscuro);
+		comboTipo.setEnabled(false); // No permitimos cambiar de puesto fácilmente para no liar las relaciones
+		darEstiloCampo(comboTipo, "Puesto (Fijo)", fondoOscuro);
 		contentPane.add(comboTipo);
 
 		txtExtra = new JTextField();
@@ -88,7 +92,7 @@ public class AñadirEmpleado extends JFrame {
 		darEstiloCampo(txtExtra, "Especialidad / Turno", fondoOscuro);
 		contentPane.add(txtExtra);
 
-		JButton btnGuardar = new JButton("GUARDAR EMPLEADO");
+		JButton btnGuardar = new JButton("ACTUALIZAR EMPLEADO");
 		btnGuardar.setBounds(40, 630, 300, 45);
 		btnGuardar.setBackground(azulGym);
 		btnGuardar.setForeground(Color.BLACK);
@@ -98,7 +102,7 @@ public class AñadirEmpleado extends JFrame {
 		btnGuardar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				guardarEnBBDD(p); 
+				actualizarEnBBDD(p); 
 			}
 		});
 		contentPane.add(btnGuardar);
@@ -118,6 +122,8 @@ public class AñadirEmpleado extends JFrame {
 			}
 		});
 		contentPane.add(btnCancelar);
+
+		cargarDatosOriginales();
 	}
 
 	private void darEstiloCampo(JComponent campo, String titulo, Color fondo) {
@@ -129,8 +135,50 @@ public class AñadirEmpleado extends JFrame {
 		campo.setBorder(new TitledBorder(new LineBorder(Color.DARK_GRAY), titulo, TitledBorder.LEADING, TitledBorder.TOP, null, Color.GRAY));
 	}
 
-	private void guardarEnBBDD(PanelAdministrador p) {
-		if (txtDni.getText().trim().isEmpty() || txtNombre.getText().trim().isEmpty() || txtNomina.getText().trim().isEmpty()) {
+	private void cargarDatosOriginales() {
+		try {
+			Connection con = Main.getConectar();
+			String sql = "SELECT e.*, en.tipo as ent_tipo, r.turno as rec_turno, l.turno as lim_turno " +
+						 "FROM Empleados e " +
+						 "LEFT JOIN Entrenador en ON e.dni = en.tipo_empleados " +
+						 "LEFT JOIN Recepcionista r ON e.dni = r.tipo_empleados " +
+						 "LEFT JOIN Limpiador l ON e.dni = l.tipo_empleados " +
+						 "WHERE e.dni = ?";
+			
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, dniOriginal);
+			ResultSet rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				txtDni.setText(rs.getString("dni"));
+				txtNombre.setText(rs.getString("nombre"));
+				txtApellido.setText(rs.getString("apellido"));
+				txtTelefono.setText(rs.getString("telefono"));
+				txtNomina.setText(rs.getString("nomina"));
+				txtUsuario.setText(rs.getString("usuario"));
+				txtPassword.setText(rs.getString("contraseña"));
+				
+				if (rs.getString("ent_tipo") != null) {
+					comboTipo.setSelectedItem("Entrenador");
+					txtExtra.setText(rs.getString("ent_tipo"));
+				} else if (rs.getString("rec_turno") != null) {
+					comboTipo.setSelectedItem("Recepcionista");
+					txtExtra.setText(rs.getString("rec_turno"));
+				} else if (rs.getString("lim_turno") != null) {
+					comboTipo.setSelectedItem("Limpiador");
+					txtExtra.setText(rs.getString("lim_turno"));
+				}
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(this, "Error al cargar los datos del empleado.");
+			ex.printStackTrace();
+		}
+	}
+
+	private void actualizarEnBBDD(PanelAdministrador p) {
+		if (txtNombre.getText().trim().isEmpty() || txtNomina.getText().trim().isEmpty()) {
 			JOptionPane.showMessageDialog(this, "Rellena los campos obligatorios.", "Aviso", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
@@ -141,34 +189,34 @@ public class AñadirEmpleado extends JFrame {
 			
 			Connection con = Main.getConectar();
 			
-			String sqlEmpleados = "INSERT INTO Empleados (dni, telefono, nomina, nombre, apellido, usuario, contraseña) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			String sqlEmpleados = "UPDATE Empleados SET telefono = ?, nomina = ?, nombre = ?, apellido = ?, usuario = ?, contraseña = ? WHERE dni = ?";
 			PreparedStatement pstmt1 = con.prepareStatement(sqlEmpleados);
-			pstmt1.setString(1, txtDni.getText().trim());
-			pstmt1.setString(2, txtTelefono.getText().trim());
-			pstmt1.setDouble(3, nomina);
-			pstmt1.setString(4, txtNombre.getText().trim());
-			pstmt1.setString(5, txtApellido.getText().trim());
-			pstmt1.setString(6, txtUsuario.getText().trim());
-			pstmt1.setString(7, txtPassword.getText().trim());
+			pstmt1.setString(1, txtTelefono.getText().trim());
+			pstmt1.setDouble(2, nomina);
+			pstmt1.setString(3, txtNombre.getText().trim());
+			pstmt1.setString(4, txtApellido.getText().trim());
+			pstmt1.setString(5, txtUsuario.getText().trim());
+			pstmt1.setString(6, txtPassword.getText().trim());
+			pstmt1.setString(7, dniOriginal);
 			pstmt1.executeUpdate();
 			pstmt1.close();
 
 			PreparedStatement pstmt2 = null;
 			if (tipo.equals("Entrenador")) {
-				String sqlEntrenador = "INSERT INTO Entrenador (tipo_empleados, tipo) VALUES (?, ?)";
+				String sqlEntrenador = "UPDATE Entrenador SET tipo = ? WHERE tipo_empleados = ?";
 				pstmt2 = con.prepareStatement(sqlEntrenador);
-				pstmt2.setString(1, txtDni.getText().trim());
-				pstmt2.setString(2, txtExtra.getText().trim());
+				pstmt2.setString(1, txtExtra.getText().trim());
+				pstmt2.setString(2, dniOriginal);
 			} else if (tipo.equals("Recepcionista")) {
-				String sqlRecep = "INSERT INTO Recepcionista (tipo_empleados, turno) VALUES (?, ?)";
+				String sqlRecep = "UPDATE Recepcionista SET turno = ? WHERE tipo_empleados = ?";
 				pstmt2 = con.prepareStatement(sqlRecep);
-				pstmt2.setString(1, txtDni.getText().trim());
-				pstmt2.setString(2, txtExtra.getText().trim());
+				pstmt2.setString(1, txtExtra.getText().trim());
+				pstmt2.setString(2, dniOriginal);
 			} else if (tipo.equals("Limpiador")) {
-				String sqlLimp = "INSERT INTO Limpiador (tipo_empleados, turno) VALUES (?, ?)";
+				String sqlLimp = "UPDATE Limpiador SET turno = ? WHERE tipo_empleados = ?";
 				pstmt2 = con.prepareStatement(sqlLimp);
-				pstmt2.setString(1, txtDni.getText().trim());
-				pstmt2.setString(2, txtExtra.getText().trim());
+				pstmt2.setString(1, txtExtra.getText().trim());
+				pstmt2.setString(2, dniOriginal);
 			}
 			
 			if (pstmt2 != null) {
@@ -176,7 +224,7 @@ public class AñadirEmpleado extends JFrame {
 				pstmt2.close();
 			}
 
-			JOptionPane.showMessageDialog(this, "Empleado registrado con éxito.");
+			JOptionPane.showMessageDialog(this, "Empleado actualizado con éxito.");
 			
 			p.cargarDatosPersonal(); 
 			
@@ -186,7 +234,7 @@ public class AñadirEmpleado extends JFrame {
 		} catch (NumberFormatException ex) {
 			JOptionPane.showMessageDialog(this, "La nómina debe ser un número válido.", "Error de formato", JOptionPane.ERROR_MESSAGE);
 		} catch (SQLException ex) {
-			JOptionPane.showMessageDialog(this, "Error al guardar: Comprueba que el DNI no exista ya", "Error SQL", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Error al actualizar en la base de datos.", "Error SQL", JOptionPane.ERROR_MESSAGE);
 			ex.printStackTrace();
 		}
 	}

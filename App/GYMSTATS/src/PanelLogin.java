@@ -157,9 +157,29 @@ public class PanelLogin extends JFrame {
         		            //Cerramos la ventana de login y vaciamos los campos de texto
         		            dispose();
         		        } else {
-        		            //Si no hay coincidencia, las credenciales son incorrectas
-        		            lblMensaje.setText("Usuario/contraseña incorrectos.");
-        		            txtPassword.setText(""); //Limpiamos la contraseña
+        		            //Si no es admin, buscamos en la tabla de empleados
+        		            String sqlEmp = "SELECT nombre FROM Empleados WHERE usuario = ? AND contraseña = ?";
+        		            PreparedStatement pstmtEmp = con.prepareStatement(sqlEmp);
+        		            pstmtEmp.setString(1, user);
+        		            pstmtEmp.setString(2, passwd);
+        		            
+        		            ResultSet rsEmp = pstmtEmp.executeQuery();
+        		            
+        		            if(rsEmp.next()) {
+        		                //Es un empleado
+        		                PanelEmpleado panelEmp = new PanelEmpleado(PanelLogin.this);
+        		                panelEmp.setVisible(true);
+        		                
+        		                txtUsuario.setText("");
+        		                txtPassword.setText("");
+        		                dispose();
+        		            } else {
+        		                //Si no hay coincidencia, las credenciales son incorrectas
+        		                lblMensaje.setText("Usuario/contraseña incorrectos.");
+        		                txtPassword.setText(""); //Limpiamos la contraseña
+        		            }
+        		            rsEmp.close();
+        		            pstmtEmp.close();
         		        }
         		        
         		        //Cerramos el ResultSet y el PreparedStatement del admin

@@ -11,12 +11,26 @@ public class AñadirSocio extends JFrame {
 	private JTextField txtDni, txtNombre, txtApellido, txtUsuario;
 	private JPasswordField txtPass;
 
+	private PanelAdministrador pAdmin;
+	private PanelEmpleado pEmp;
+
 	public AñadirSocio(PanelAdministrador p) {
+		this.pAdmin = p;
+		inicializar();
+	}
+
+	public AñadirSocio(PanelEmpleado p) {
+		this.pEmp = p;
+		inicializar();
+	}
+
+	private void inicializar() {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				setVisible(false);
-				p.setVisible(true);
+				if (pAdmin != null) pAdmin.setVisible(true);
+				else if (pEmp != null) pEmp.setVisible(true);
 			}
 		});
 		
@@ -82,7 +96,7 @@ public class AñadirSocio extends JFrame {
 		btnGuardar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				guardarEnBBDD(p); //Llamamos al método de abajo pasándole el panel padre
+				guardarEnBBDD(); //Llamamos al método de abajo pasándole el panel padre
 			}
 		});
 		contentPane.add(btnGuardar);
@@ -99,7 +113,8 @@ public class AñadirSocio extends JFrame {
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose(); //Si cancelamos libreamos memoria usando dispsose
-				p.setVisible(true);
+				if (pAdmin != null) pAdmin.setVisible(true);
+				else if (pEmp != null) pEmp.setVisible(true);
 			}
 		});
 		contentPane.add(btnCancelar);
@@ -114,7 +129,7 @@ public class AñadirSocio extends JFrame {
 	}
 
 	// MÉTODO PARA INSERTAR EN POSTGRESQL
-	private void guardarEnBBDD(PanelAdministrador p) {
+	private void guardarEnBBDD() {
 		//Validamos que no dejen el DNI o el usuario en blanco
 		if (txtDni.getText().trim().isEmpty() || txtUsuario.getText().trim().isEmpty() || txtNombre.getText().trim().isEmpty()) {
 			JOptionPane.showMessageDialog(this, "Rellena los campos obligatorios.", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -137,11 +152,16 @@ public class AñadirSocio extends JFrame {
 
 			JOptionPane.showMessageDialog(this, "Socio registrado con éxito.");
 			
-			//Una vez hecho actualizamos los datos de los socios llamando a el pètodo de el PanelAdministrador de cargarDatosSocios.
-			p.cargarDatosSocios(); 
+			//Una vez hecho actualizamos los datos
+			if (pAdmin != null) {
+				pAdmin.cargarDatosSocios();
+				pAdmin.setVisible(true);
+			} else if (pEmp != null) {
+				pEmp.cargarDatosSocios();
+				pEmp.setVisible(true);
+			}
 			
 			dispose(); //Cerramos esta ventana y liberamos memoria
-			p.setVisible(true); //Abrimos el panel principal de nuevo
 
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(this, "Error: El DNI o Usuario ya existen en la base de datos.", "Error SQL", JOptionPane.ERROR_MESSAGE);
