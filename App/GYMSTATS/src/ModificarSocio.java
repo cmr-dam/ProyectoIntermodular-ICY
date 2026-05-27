@@ -8,24 +8,38 @@ public class ModificarSocio extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField txtDni, txtNombre, txtApellido, txtUsuario;
+	private JTextField txtDni, txtNombre, txtApellido, txtUsuario, txtDiasAcceso;
 	private JPasswordField txtPass;
 	private String dniOriginal; //Guardamos el DNI original
 
+	private PanelAdministrador pAdmin;
+	private PanelEmpleado pEmp;
+
 	public ModificarSocio(PanelAdministrador p, String dniSeleccionado) {
+		this.pAdmin = p;
 		this.dniOriginal = dniSeleccionado;
-		
+		inicializar();
+	}
+
+	public ModificarSocio(PanelEmpleado p, String dniSeleccionado) {
+		this.pEmp = p;
+		this.dniOriginal = dniSeleccionado;
+		inicializar();
+	}
+
+	private void inicializar() {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				dispose();
-				p.setVisible(true);
+				if (pAdmin != null) pAdmin.setVisible(true);
+				else if (pEmp != null) pEmp.setVisible(true);
 			}
 		});
 		
 		setTitle("GymStats - Modificar Socio");
 		Main.setIconoApp(this);
-		setBounds(100, 100, 400, 550); 
+		setBounds(100, 100, 400, 620); 
 		setLocationRelativeTo(null); 
 		setResizable(false);
 
@@ -75,12 +89,17 @@ public class ModificarSocio extends JFrame {
 		darEstiloCampo(txtPass, "Contraseña", fondoOscuro);
 		contentPane.add(txtPass);
 
+		txtDiasAcceso = new JTextField();
+		txtDiasAcceso.setBounds(40, 380, 300, 45);
+		darEstiloCampo(txtDiasAcceso, "Días de Acceso Restantes", fondoOscuro);
+		contentPane.add(txtDiasAcceso);
+
 		//CARGAMOS LOS DATOS DEL SOCIO ANTES DE MOSTRAR LA VENTANA
 		cargarDatosSocio();
 
 		//BOTN ACTUALIZAR
 		JButton btnActualizar = new JButton("ACTUALIZAR DATOS");
-		btnActualizar.setBounds(40, 400, 300, 45);
+		btnActualizar.setBounds(40, 460, 300, 45);
 		btnActualizar.setBackground(azulGym);
 		btnActualizar.setForeground(Color.BLACK);
 		btnActualizar.setFont(new Font("Segoe UI Bold", Font.PLAIN, 14));
@@ -89,14 +108,14 @@ public class ModificarSocio extends JFrame {
 		btnActualizar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnActualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				actualizarEnBBDD(p); 
+				actualizarEnBBDD(); 
 			}
 		});
 		contentPane.add(btnActualizar);
 
 		//BOTON CANCELAR
 		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setBounds(40, 455, 300, 30);
+		btnCancelar.setBounds(40, 515, 300, 30);
 		btnCancelar.setBackground(fondoOscuro);
 		btnCancelar.setForeground(Color.GRAY);
 		btnCancelar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
@@ -106,7 +125,8 @@ public class ModificarSocio extends JFrame {
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				p.setVisible(true);
+				if (pAdmin != null) pAdmin.setVisible(true);
+				else if (pEmp != null) pEmp.setVisible(true);
 			}
 		});
 		contentPane.add(btnCancelar);
@@ -135,6 +155,17 @@ public class ModificarSocio extends JFrame {
 				txtApellido.setText(rs.getString("apellido"));
 				txtUsuario.setText(rs.getString("usuario"));
 				txtPass.setText(rs.getString("contraseña"));
+				
+				Date sqlDate = rs.getDate("fecha_compra");
+				int diasQuedan = 0;
+				if (sqlDate != null) {
+					java.time.LocalDate fechaCompra = sqlDate.toLocalDate();
+					java.time.LocalDate hoy = java.time.LocalDate.now();
+					long diasPasados = java.time.temporal.ChronoUnit.DAYS.between(fechaCompra, hoy);
+					diasQuedan = (int) (30 - diasPasados);
+					if (diasQuedan < 0) diasQuedan = 0;
+				}
+				txtDiasAcceso.setText(String.valueOf(diasQuedan));
 			}
 			
 			rs.close();
@@ -147,23 +178,38 @@ public class ModificarSocio extends JFrame {
 	}
 
 	// MÉTODO PARA HACER EL UPDATE EN POSTGRESQL
-	private void actualizarEnBBDD(PanelAdministrador p) {
+	private void actualizarEnBBDD() {
 		if (txtUsuario.getText().trim().isEmpty() || txtNombre.getText().trim().isEmpty()) {
 			JOptionPane.showMessageDialog(this, "El nombre y el usuario no pueden estar vacíos.", "Aviso", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		
+		int nuevosDias = 0;
+		try {
+			nuevosDias = Integer.parseInt(txtDiasAcceso.getText().trim());
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(this, "Los días de acceso deben ser un número.", "Aviso", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
 		try {
 			Connection con = Main.getConectar();
+			
+			// Calculamos nueva fecha_compra
+			java.time.LocalDate hoy = java.time.LocalDate.now();
+			java.time.LocalDate nuevaFecha = hoy.minusDays(30 - nuevosDias);
+			java.sql.Date sqlNuevaFecha = java.sql.Date.valueOf(nuevaFecha);
+
 			//Hacemos un UPDATE filtrando por el DNI
-			String sql = "UPDATE Cliente SET nombre = ?, apellido = ?, usuario = ?, contraseña = ? WHERE dni = ?";
+			String sql = "UPDATE Cliente SET nombre = ?, apellido = ?, usuario = ?, contraseña = ?, fecha_compra = ? WHERE dni = ?";
 			PreparedStatement pstmt = con.prepareStatement(sql); //Ejecutamos el update
 			
 			pstmt.setString(1, txtNombre.getText().trim());
 			pstmt.setString(2, txtApellido.getText().trim());
 			pstmt.setString(3, txtUsuario.getText().trim());
 			pstmt.setString(4, new String(txtPass.getPassword()));
-			pstmt.setString(5, dniOriginal); 
+			pstmt.setDate(5, sqlNuevaFecha);
+			pstmt.setString(6, dniOriginal); 
 
 			pstmt.executeUpdate();
 			pstmt.close();
@@ -171,10 +217,15 @@ public class ModificarSocio extends JFrame {
 			JOptionPane.showMessageDialog(this, "Datos actualizados correctamente.");
 			
 			//Recargamos la tabla del panel administrador
-			p.cargarDatosSocios(); 
+			if (pAdmin != null) {
+				pAdmin.cargarDatosSocios();
+				pAdmin.setVisible(true);
+			} else if (pEmp != null) {
+				pEmp.cargarDatosSocios();
+				pEmp.setVisible(true);
+			}
 			
-			dispose(); 
-			p.setVisible(true); 
+			dispose();
 
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(this, "Error al actualizar. ¿El usuario ya existe?", "Error SQL", JOptionPane.ERROR_MESSAGE);

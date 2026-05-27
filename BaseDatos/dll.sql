@@ -54,7 +54,9 @@ CREATE TABLE Empleados (
     telefono VARCHAR(20),
     nomina DECIMAL(10,2),
     nombre VARCHAR(50),
-    apellido VARCHAR(50)
+    apellido VARCHAR(50),
+    usuario VARCHAR(50) UNIQUE,
+    contraseña VARCHAR(50)
 );
 
 -- ADMINISTRADORES

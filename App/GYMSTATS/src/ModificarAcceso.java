@@ -11,17 +11,34 @@ public class ModificarAcceso extends JFrame {
     private JTextField txtDni, txtFecha, txtEntrada, txtSalida;
     private String dniOri, fechaOri, entradaOri, salidaOri;
 
+    private PanelAdministrador pAdmin;
+    private PanelEmpleado pEmp;
+
     public ModificarAcceso(PanelAdministrador p, String dni, String fecha, String hEntrada, String hSalida) {
+        this.pAdmin = p;
         this.dniOri = dni;
         this.fechaOri = fecha;
         this.entradaOri = hEntrada;
         this.salidaOri = hSalida.equals("Dentro") ? "" : hSalida;
+        inicializar();
+    }
 
+    public ModificarAcceso(PanelEmpleado p, String dni, String fecha, String hEntrada, String hSalida) {
+        this.pEmp = p;
+        this.dniOri = dni;
+        this.fechaOri = fecha;
+        this.entradaOri = hEntrada;
+        this.salidaOri = hSalida.equals("Dentro") ? "" : hSalida;
+        inicializar();
+    }
+
+    private void inicializar() {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 dispose();
-                p.setVisible(true);
+                if (pAdmin != null) pAdmin.setVisible(true);
+                else if (pEmp != null) pEmp.setVisible(true);
             }
         });
         
@@ -77,7 +94,7 @@ public class ModificarAcceso extends JFrame {
         btnActualizar.setFocusPainted(false);
         btnActualizar.setBorder(null);
         btnActualizar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnActualizar.addActionListener(e -> actualizarFichaje(p));
+        btnActualizar.addActionListener(e -> actualizarFichaje());
         contentPane.add(btnActualizar);
 
         JButton btnCancelar = new JButton("Cancelar");
@@ -88,7 +105,11 @@ public class ModificarAcceso extends JFrame {
         btnCancelar.setBorder(null);
         btnCancelar.setContentAreaFilled(false);
         btnCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnCancelar.addActionListener(e -> { dispose(); p.setVisible(true); });
+        btnCancelar.addActionListener(e -> {
+            dispose();
+            if (pAdmin != null) pAdmin.setVisible(true);
+            else if (pEmp != null) pEmp.setVisible(true);
+        });
         contentPane.add(btnCancelar);
     }
 
@@ -99,7 +120,7 @@ public class ModificarAcceso extends JFrame {
         campo.setBorder(new TitledBorder(new LineBorder(Color.DARK_GRAY), titulo, TitledBorder.LEADING, TitledBorder.TOP, null, Color.GRAY));
     }
 
-    private void actualizarFichaje(PanelAdministrador p) {
+    private void actualizarFichaje() {
         try {
             String nuevaFechaSQL = convertirAFormatoSQL(txtFecha.getText().trim());
             String nuevaEntrada = normalizarHora(txtEntrada.getText().trim());
@@ -202,9 +223,14 @@ public class ModificarAcceso extends JFrame {
 
             if(filas > 0) {
                 JOptionPane.showMessageDialog(this, "Fichaje actualizado");
-                p.cargarDatosAcceso();
+                if (pAdmin != null) {
+                    pAdmin.cargarDatosAcceso();
+                    pAdmin.setVisible(true);
+                } else if (pEmp != null) {
+                    pEmp.cargarDatosAcceso();
+                    pEmp.setVisible(true);
+                }
                 dispose();
-                p.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "No se encontró el registro original.");
             }

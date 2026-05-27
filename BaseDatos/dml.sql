@@ -33,12 +33,12 @@ INSERT INTO Zona_Entrenos (id, tipo) VALUES
 (4, 'Peso Libre'),
 (5, 'Estiramientos');
 
-INSERT INTO Empleados (dni, telefono, nomina, nombre, apellido) VALUES 
-('11111111A', '600111222', 1500.00, 'Carlos', 'Sánchez'),
-('22222222B', '600333444', 1200.00, 'Laura', 'Gómez'),
-('33333333C', '600555666', 1100.00, 'Pedro', 'Ruiz'),
-('44444444D', '600777888', 1800.00, 'Ana', 'Martínez'),
-('55555555E', '600999000', 1600.00, 'Sergio', 'Fernández');
+INSERT INTO Empleados (dni, telefono, nomina, nombre, apellido, usuario, contraseña) VALUES 
+('11111111A', '600111222', 1500.00, 'Carlos', 'Sánchez', 'carlos_emp', '1234'),
+('22222222B', '600333444', 1200.00, 'Laura', 'Gómez', 'laura', '1234'),
+('33333333C', '600555666', 1100.00, 'Pedro', 'Ruiz', 'pedro', '1234'),
+('44444444D', '600777888', 1800.00, 'Ana', 'Martínez', 'ana', '1234'),
+('55555555E', '600999000', 1600.00, 'Sergio', 'Fernández', 'sergio', '1234');
 
 INSERT INTO Entrenador (tipo_empleados, tipo) VALUES 
 ('11111111A', 'Musculación'),

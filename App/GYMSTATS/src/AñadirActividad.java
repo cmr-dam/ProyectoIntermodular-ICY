@@ -11,12 +11,26 @@ public class AñadirActividad extends JFrame {
 	private JComboBox<String> comboEntrenador, comboClase, comboZona;
 	private JTextField txtHora, txtDescripcion;
 
+	private PanelAdministrador pAdmin;
+	private PanelEmpleado pEmp;
+
 	public AñadirActividad(PanelAdministrador p) {
+		this.pAdmin = p;
+		inicializar();
+	}
+
+	public AñadirActividad(PanelEmpleado p) {
+		this.pEmp = p;
+		inicializar();
+	}
+
+	private void inicializar() {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				setVisible(false);
-				p.setVisible(true);
+				if (pAdmin != null) pAdmin.setVisible(true);
+				else if (pEmp != null) pEmp.setVisible(true);
 			}
 		});
 		
@@ -79,7 +93,7 @@ public class AñadirActividad extends JFrame {
 		btnGuardar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				guardarEnBBDD(p); 
+				guardarEnBBDD(); 
 			}
 		});
 		contentPane.add(btnGuardar);
@@ -95,7 +109,8 @@ public class AñadirActividad extends JFrame {
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose(); 
-				p.setVisible(true);
+				if (pAdmin != null) pAdmin.setVisible(true);
+				else if (pEmp != null) pEmp.setVisible(true);
 			}
 		});
 		contentPane.add(btnCancelar);
@@ -146,7 +161,7 @@ public class AñadirActividad extends JFrame {
 		}
 	}
 
-	private void guardarEnBBDD(PanelAdministrador p) {
+	private void guardarEnBBDD() {
 		if (txtHora.getText().trim().isEmpty() || comboEntrenador.getSelectedItem() == null) {
 			JOptionPane.showMessageDialog(this, "Rellena los campos obligatorios.", "Aviso", JOptionPane.WARNING_MESSAGE);
 			return;
@@ -179,9 +194,14 @@ public class AñadirActividad extends JFrame {
 
 			JOptionPane.showMessageDialog(this, "Actividad programada con éxito.");
 			
-			p.cargarDatosActividades(); 
-			dispose(); 
-			p.setVisible(true);
+			if (pAdmin != null) {
+				pAdmin.cargarDatosActividades();
+				pAdmin.setVisible(true);
+			} else if (pEmp != null) {
+				pEmp.cargarDatosActividades();
+				pEmp.setVisible(true);
+			}
+			dispose();
 
 		} catch (IllegalArgumentException ex) {
 			JOptionPane.showMessageDialog(this, "La hora debe tener formato HH:MM (ejemplo 16:30).", "Error de formato", JOptionPane.ERROR_MESSAGE);

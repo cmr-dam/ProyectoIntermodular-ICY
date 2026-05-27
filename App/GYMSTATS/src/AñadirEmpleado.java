@@ -8,7 +8,7 @@ public class AñadirEmpleado extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField txtDni, txtNombre, txtApellido, txtTelefono, txtNomina, txtExtra;
+	private JTextField txtDni, txtNombre, txtApellido, txtTelefono, txtNomina, txtExtra, txtUsuario, txtPassword;
 	private JComboBox<String> comboTipo;
 
 	public AñadirEmpleado(PanelAdministrador p) {
@@ -22,7 +22,7 @@ public class AñadirEmpleado extends JFrame {
 		
 		setTitle("GymStats - Añadir Empleado");
 		Main.setIconoApp(this);
-		setBounds(100, 100, 400, 650);
+		setBounds(100, 100, 400, 770);
 		setLocationRelativeTo(null);
 		setResizable(false);
 
@@ -62,24 +62,34 @@ public class AñadirEmpleado extends JFrame {
 		darEstiloCampo(txtTelefono, "Teléfono", fondoOscuro);
 		contentPane.add(txtTelefono);
 
+		txtUsuario = new JTextField();
+		txtUsuario.setBounds(40, 320, 300, 45);
+		darEstiloCampo(txtUsuario, "Usuario", fondoOscuro);
+		contentPane.add(txtUsuario);
+
+		txtPassword = new JTextField();
+		txtPassword.setBounds(40, 380, 300, 45);
+		darEstiloCampo(txtPassword, "Contraseña", fondoOscuro);
+		contentPane.add(txtPassword);
+
 		txtNomina = new JTextField();
-		txtNomina.setBounds(40, 320, 300, 45);
+		txtNomina.setBounds(40, 440, 300, 45);
 		darEstiloCampo(txtNomina, "Nómina (€)", fondoOscuro);
 		contentPane.add(txtNomina);
 
 		String[] tipos = {"Entrenador", "Recepcionista", "Limpiador"};
 		comboTipo = new JComboBox<>(tipos);
-		comboTipo.setBounds(40, 380, 300, 45);
+		comboTipo.setBounds(40, 500, 300, 45);
 		darEstiloCampo(comboTipo, "Puesto", fondoOscuro);
 		contentPane.add(comboTipo);
 
 		txtExtra = new JTextField();
-		txtExtra.setBounds(40, 440, 300, 45);
+		txtExtra.setBounds(40, 560, 300, 45);
 		darEstiloCampo(txtExtra, "Especialidad / Turno", fondoOscuro);
 		contentPane.add(txtExtra);
 
 		JButton btnGuardar = new JButton("GUARDAR EMPLEADO");
-		btnGuardar.setBounds(40, 510, 300, 45);
+		btnGuardar.setBounds(40, 630, 300, 45);
 		btnGuardar.setBackground(azulGym);
 		btnGuardar.setForeground(Color.BLACK);
 		btnGuardar.setFont(new Font("Segoe UI Bold", Font.PLAIN, 14));
@@ -94,7 +104,7 @@ public class AñadirEmpleado extends JFrame {
 		contentPane.add(btnGuardar);
 
 		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setBounds(40, 565, 300, 30);
+		btnCancelar.setBounds(40, 685, 300, 30);
 		btnCancelar.setBackground(fondoOscuro);
 		btnCancelar.setForeground(Color.GRAY);
 		btnCancelar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
@@ -131,13 +141,15 @@ public class AñadirEmpleado extends JFrame {
 			
 			Connection con = Main.getConectar();
 			
-			String sqlEmpleados = "INSERT INTO Empleados (dni, telefono, nomina, nombre, apellido) VALUES (?, ?, ?, ?, ?)";
+			String sqlEmpleados = "INSERT INTO Empleados (dni, telefono, nomina, nombre, apellido, usuario, contraseña) VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt1 = con.prepareStatement(sqlEmpleados);
 			pstmt1.setString(1, txtDni.getText().trim());
 			pstmt1.setString(2, txtTelefono.getText().trim());
 			pstmt1.setDouble(3, nomina);
 			pstmt1.setString(4, txtNombre.getText().trim());
 			pstmt1.setString(5, txtApellido.getText().trim());
+			pstmt1.setString(6, txtUsuario.getText().trim());
+			pstmt1.setString(7, txtPassword.getText().trim());
 			pstmt1.executeUpdate();
 			pstmt1.close();
 

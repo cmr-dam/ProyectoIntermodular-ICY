@@ -194,7 +194,10 @@ public class PanelAdministrador extends JFrame {
                 int fila = tablaPersonal.getSelectedRow();
                 
                 if(fila != -1) {
-                    JOptionPane.showMessageDialog(PanelAdministrador.this, "Falta crear la ventana ModificarEmpleado");
+                    String dniSeleccionado = modeloTablaPersonal.getValueAt(fila, 0).toString();
+                    ModificarEmpleado ventanaModificar = new ModificarEmpleado(PanelAdministrador.this, dniSeleccionado);
+                    ventanaModificar.setVisible(true);
+                    setVisible(false);
                 } else {
                     JOptionPane.showMessageDialog(PanelAdministrador.this, "Debes seleccionar un empleado", "Error", JOptionPane.ERROR_MESSAGE);
                 }

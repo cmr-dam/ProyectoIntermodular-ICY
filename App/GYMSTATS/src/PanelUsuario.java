@@ -3,6 +3,8 @@ import java.sql.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class PanelUsuario extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -152,6 +154,53 @@ public class PanelUsuario extends JFrame {
 		lblFoot.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		lblFoot.setBounds(20, 430, 445, 20);
 		contentPane.add(lblFoot);
+
+		cargarDatosUsuario();
+	}
+
+	private void cargarDatosUsuario() {
+		try {
+			Connection con = Main.getConectar();
+			String sql = "SELECT c.fecha_compra, cal.IMC FROM Cliente c LEFT JOIN Calculadora cal ON c.id_calculadora = cal.id WHERE c.dni = ?";
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, dniGlobal);
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				// Cargar Días Restantes
+				Date sqlDate = rs.getDate("fecha_compra");
+				int diasQuedan = 0;
+				if (sqlDate != null) {
+					LocalDate fechaCompra = sqlDate.toLocalDate();
+					LocalDate hoy = LocalDate.now();
+					long diasPasados = ChronoUnit.DAYS.between(fechaCompra, hoy);
+					diasQuedan = (int) (30 - diasPasados);
+					if (diasQuedan < 0) diasQuedan = 0;
+				}
+				lblDiasRestantes.setText("Te quedan " + diasQuedan + " días de acceso");
+				progressMembresia.setValue(diasQuedan);
+
+				// Cargar IMC
+				double imc = rs.getDouble("IMC");
+				if (!rs.wasNull()) {
+					lblValorIMC.setText(String.format("%.1f", imc));
+					if (imc < 18.5) { 
+						lblEstadoIMC.setText("BAJO PESO"); 
+						lblEstadoIMC.setForeground(Color.YELLOW); 
+					} else if (imc < 25) { 
+						lblEstadoIMC.setText("NORMAL"); 
+						lblEstadoIMC.setForeground(Color.GREEN); 
+					} else { 
+						lblEstadoIMC.setText("SOBREPESO"); 
+						lblEstadoIMC.setForeground(Color.ORANGE); 
+					}
+				}
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	private void calcularIMC(String dniUsuario) {
