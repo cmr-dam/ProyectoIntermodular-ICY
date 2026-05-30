@@ -162,8 +162,9 @@ public class AñadirActividad extends JFrame {
 	}
 
 	private void guardarEnBBDD() {
-		if (txtHora.getText().trim().isEmpty() || comboEntrenador.getSelectedItem() == null) {
-			JOptionPane.showMessageDialog(this, "Rellena los campos obligatorios.", "Aviso", JOptionPane.WARNING_MESSAGE);
+		if (txtHora.getText().trim().isEmpty() || txtDescripcion.getText().trim().isEmpty() || 
+            comboEntrenador.getSelectedItem() == null || comboClase.getSelectedItem() == null || comboZona.getSelectedItem() == null) {
+			JOptionPane.showMessageDialog(this, "Rellena todos los campos.", "Aviso", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 

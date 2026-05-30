@@ -130,9 +130,19 @@ public class AñadirSocio extends JFrame {
 
 	// MÉTODO PARA INSERTAR EN POSTGRESQL
 	private void guardarEnBBDD() {
-		//Validamos que no dejen el DNI o el usuario en blanco
-		if (txtDni.getText().trim().isEmpty() || txtUsuario.getText().trim().isEmpty() || txtNombre.getText().trim().isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Rellena los campos obligatorios.", "Aviso", JOptionPane.WARNING_MESSAGE);
+		String dni = txtDni.getText().trim();
+		String nombre = txtNombre.getText().trim();
+		String apellido = txtApellido.getText().trim();
+		String usuario = txtUsuario.getText().trim();
+		String pass = new String(txtPass.getPassword()).trim();
+
+		if (dni.isEmpty() || nombre.isEmpty() || apellido.isEmpty() || usuario.isEmpty() || pass.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Rellena todos los campos.", "Aviso", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+
+		if (!validarDNI(dni)) {
+			JOptionPane.showMessageDialog(this, "El formato del DNI es incorrecto (8 números y 1 letra).", "Aviso", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
@@ -167,5 +177,9 @@ public class AñadirSocio extends JFrame {
 			JOptionPane.showMessageDialog(this, "Error: El DNI o Usuario ya existen en la base de datos.", "Error SQL", JOptionPane.ERROR_MESSAGE);
 			ex.printStackTrace();
 		}
+	}
+
+	private boolean validarDNI(String dni) {
+		return dni.matches("^[0-9]{8}[A-Za-z]$");
 	}
 }

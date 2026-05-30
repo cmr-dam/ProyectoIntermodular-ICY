@@ -121,6 +121,10 @@ public class ModificarAcceso extends JFrame {
     }
 
     private void actualizarFichaje() {
+        if (txtFecha.getText().trim().isEmpty() || txtEntrada.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La fecha y la hora de entrada son obligatorias.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         try {
             String nuevaFechaSQL = convertirAFormatoSQL(txtFecha.getText().trim());
             String nuevaEntrada = normalizarHora(txtEntrada.getText().trim());

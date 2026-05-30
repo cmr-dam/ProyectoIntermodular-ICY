@@ -130,8 +130,22 @@ public class AñadirEmpleado extends JFrame {
 	}
 
 	private void guardarEnBBDD(PanelAdministrador p) {
-		if (txtDni.getText().trim().isEmpty() || txtNombre.getText().trim().isEmpty() || txtNomina.getText().trim().isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Rellena los campos obligatorios.", "Aviso", JOptionPane.WARNING_MESSAGE);
+		String dni = txtDni.getText().trim();
+		String nombre = txtNombre.getText().trim();
+		String apellido = txtApellido.getText().trim();
+		String telefono = txtTelefono.getText().trim();
+		String nominaStr = txtNomina.getText().trim();
+		String extra = txtExtra.getText().trim();
+		String usuario = txtUsuario.getText().trim();
+		String password = txtPassword.getText().trim();
+		
+		if (dni.isEmpty() || nombre.isEmpty() || apellido.isEmpty() || telefono.isEmpty() || nominaStr.isEmpty() || extra.isEmpty() || usuario.isEmpty() || password.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Rellena todos los campos.", "Aviso", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+
+		if (!validarDNI(dni)) {
+			JOptionPane.showMessageDialog(this, "El formato del DNI es incorrecto (8 números y 1 letra).", "Aviso", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
@@ -189,5 +203,9 @@ public class AñadirEmpleado extends JFrame {
 			JOptionPane.showMessageDialog(this, "Error al guardar: Comprueba que el DNI no exista ya", "Error SQL", JOptionPane.ERROR_MESSAGE);
 			ex.printStackTrace();
 		}
+	}
+
+	private boolean validarDNI(String dni) {
+		return dni.matches("^[0-9]{8}[A-Za-z]$");
 	}
 }

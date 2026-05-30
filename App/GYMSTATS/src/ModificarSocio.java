@@ -179,8 +179,13 @@ public class ModificarSocio extends JFrame {
 
 	// MÉTODO PARA HACER EL UPDATE EN POSTGRESQL
 	private void actualizarEnBBDD() {
-		if (txtUsuario.getText().trim().isEmpty() || txtNombre.getText().trim().isEmpty()) {
-			JOptionPane.showMessageDialog(this, "El nombre y el usuario no pueden estar vacíos.", "Aviso", JOptionPane.WARNING_MESSAGE);
+		String nombre = txtNombre.getText().trim();
+		String apellido = txtApellido.getText().trim();
+		String usuario = txtUsuario.getText().trim();
+		String pass = new String(txtPass.getPassword()).trim();
+
+		if (nombre.isEmpty() || apellido.isEmpty() || usuario.isEmpty() || pass.isEmpty() || txtDiasAcceso.getText().trim().isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Todos los campos deben estar rellenos.", "Aviso", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 		
