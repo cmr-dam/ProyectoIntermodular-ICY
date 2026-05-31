@@ -26,7 +26,7 @@ public class Main {
     public static Connection getConectar() {
     	//CONEXION BASE DE DATOS
         try {
-        	String url = "jdbc:postgresql://192.168.206.177:5432/Gymstats";
+        	String url = "jdbc:postgresql://192.168.56.101:5432/GymstatsFinal";
             String usuario = "postgres";
             String password = "1234";
         	

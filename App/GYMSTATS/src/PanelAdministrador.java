@@ -865,14 +865,12 @@ public class PanelAdministrador extends JFrame {
                             pstSelect.close();
                             
                             String[] tablasHijas = {
-                                "DELETE FROM Registrar_Salida WHERE dni_cliente = ?",
-                                "DELETE FROM Registrar_Entrada WHERE dni_cliente = ?",
-                                "DELETE FROM Usar WHERE dni_cliente = ?",
-                                "DELETE FROM Acceder WHERE dni_cliente = ?",
-                                "DELETE FROM Asistir WHERE dni_cliente = ?",
-                                "DELETE FROM Atender WHERE dni_cliente = ?",
-                                "DELETE FROM Entrenar WHERE dni_cliente = ?"
-                            };
+                            	    "DELETE FROM Registrar_Salida WHERE dni_cliente = ?",
+                            	    "DELETE FROM Registrar_Entrada WHERE dni_cliente = ?",
+                            	    "DELETE FROM Asistir WHERE dni_cliente = ?",
+                            	    "DELETE FROM Atender WHERE dni_cliente = ?",
+                            	    "DELETE FROM Entrenar WHERE dni_cliente = ?" 
+                            	};
                             
                             for(String sqlHija : tablasHijas) {
                                 PreparedStatement pstHija = con.prepareStatement(sqlHija);
